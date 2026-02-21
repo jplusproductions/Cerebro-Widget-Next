@@ -1,8 +1,14 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+.dark {
+  --background: #050507;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -12,15 +18,109 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ── Glow / Gradient Utilities ── */
+
+.text-gradient {
+  background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #6d28d9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .text-gradient {
+  background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #6d28d9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-amber {
+  background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .text-gradient-amber {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glow-purple {
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.1), 0 0 120px rgba(139, 92, 246, 0.03);
+}
+.dark .glow-purple {
+  box-shadow: 0 0 80px rgba(139, 92, 246, 0.15), 0 0 200px rgba(139, 92, 246, 0.05);
+}
+
+.glow-amber {
+  box-shadow: 0 0 40px rgba(245, 158, 11, 0.08), 0 0 120px rgba(245, 158, 11, 0.02);
+}
+.dark .glow-amber {
+  box-shadow: 0 0 80px rgba(245, 158, 11, 0.12), 0 0 200px rgba(245, 158, 11, 0.04);
+}
+
+.card-glow {
+  position: relative;
+}
+
+.card-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.3) 0%,
+    rgba(139, 92, 246, 0) 50%,
+    rgba(245, 158, 11, 0.2) 100%
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.card-glow:hover::before {
+  opacity: 1;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.dark .bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.bg-hero-glow {
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(139, 92, 246, 0.06) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 30% at 50% 0%, rgba(245, 158, 11, 0.03) 0%, transparent 60%);
+}
+.dark .bg-hero-glow {
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(139, 92, 246, 0.12) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 30% at 50% 0%, rgba(245, 158, 11, 0.06) 0%, transparent 60%);
+}
+
+/* Code block syntax hint colors */
+.code-tag { color: #f472b6; }
+.code-attr { color: #a78bfa; }
+.code-val { color: #34d399; }
+.code-comment { color: #525263; }
