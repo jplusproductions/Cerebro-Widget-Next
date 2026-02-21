@@ -4,6 +4,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --brand: #fac421;
 }
 
 .dark {
@@ -14,6 +15,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -27,45 +29,38 @@ body {
 /* ── Glow / Gradient Utilities ── */
 
 .text-gradient {
-  background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #6d28d9 100%);
+  background: linear-gradient(135deg, #b8960a 0%, #fac421 50%, #d4a50e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .dark .text-gradient {
-  background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #6d28d9 100%);
+  background: linear-gradient(135deg, #ffe066 0%, #fac421 50%, #d4a50e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.text-gradient-amber {
-  background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #b45309 100%);
+.text-gradient-cta {
+  background: linear-gradient(135deg, #d4a50e 0%, #fac421 50%, #b8960a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.dark .text-gradient-amber {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+.dark .text-gradient-cta {
+  background: linear-gradient(135deg, #fac421 0%, #ffe066 50%, #d4a50e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.glow-purple {
-  box-shadow: 0 0 40px rgba(139, 92, 246, 0.1), 0 0 120px rgba(139, 92, 246, 0.03);
+.glow-brand {
+  box-shadow: 0 0 40px rgba(250, 196, 33, 0.1), 0 0 120px rgba(250, 196, 33, 0.03);
 }
-.dark .glow-purple {
-  box-shadow: 0 0 80px rgba(139, 92, 246, 0.15), 0 0 200px rgba(139, 92, 246, 0.05);
-}
-
-.glow-amber {
-  box-shadow: 0 0 40px rgba(245, 158, 11, 0.08), 0 0 120px rgba(245, 158, 11, 0.02);
-}
-.dark .glow-amber {
-  box-shadow: 0 0 80px rgba(245, 158, 11, 0.12), 0 0 200px rgba(245, 158, 11, 0.04);
+.dark .glow-brand {
+  box-shadow: 0 0 80px rgba(250, 196, 33, 0.15), 0 0 200px rgba(250, 196, 33, 0.05);
 }
 
 .card-glow {
@@ -80,9 +75,9 @@ body {
   padding: 1px;
   background: linear-gradient(
     135deg,
-    rgba(139, 92, 246, 0.3) 0%,
-    rgba(139, 92, 246, 0) 50%,
-    rgba(245, 158, 11, 0.2) 100%
+    rgba(250, 196, 33, 0.35) 0%,
+    rgba(250, 196, 33, 0) 50%,
+    rgba(250, 196, 33, 0.15) 100%
   );
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
@@ -99,28 +94,26 @@ body {
 
 .bg-grid {
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(250, 196, 33, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(250, 196, 33, 0.06) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 .dark .bg-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(250, 196, 33, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(250, 196, 33, 0.04) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
 .bg-hero-glow {
-  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(139, 92, 246, 0.06) 0%, transparent 70%),
-              radial-gradient(ellipse 40% 30% at 50% 0%, rgba(245, 158, 11, 0.03) 0%, transparent 60%);
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(250, 196, 33, 0.06) 0%, transparent 70%);
 }
 .dark .bg-hero-glow {
-  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(139, 92, 246, 0.12) 0%, transparent 70%),
-              radial-gradient(ellipse 40% 30% at 50% 0%, rgba(245, 158, 11, 0.06) 0%, transparent 60%);
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(250, 196, 33, 0.10) 0%, transparent 70%);
 }
 
 /* Code block syntax hint colors */
 .code-tag { color: #f472b6; }
-.code-attr { color: #a78bfa; }
+.code-attr { color: #fac421; }
 .code-val { color: #34d399; }
 .code-comment { color: #525263; }

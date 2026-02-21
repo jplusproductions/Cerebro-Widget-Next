@@ -7,7 +7,7 @@ const features = [
     title: "Plug & Play Widgets",
     description: "Standings, fixtures, live scores — rendered inside any page with zero framework dependencies.",
     icon: (
-      <svg className="h-6 w-6 text-violet-500 dark:text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <svg className="h-6 w-6 text-[#fac421]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
       </svg>
     ),
@@ -16,7 +16,7 @@ const features = [
     title: "Any CMS. Anywhere.",
     description: "SquareSpace, WordPress, Wix, Webflow, custom HTML — if it takes a script tag, it runs Cerebro.",
     icon: (
-      <svg className="h-6 w-6 text-amber-500 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <svg className="h-6 w-6 text-[#fac421]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5a17.92 17.92 0 01-8.716-2.247m0 0A8.966 8.966 0 013 12c0-1.264.26-2.466.732-3.558" />
       </svg>
     ),
@@ -25,7 +25,7 @@ const features = [
     title: "Live Data Feeds",
     description: "Professional-grade sports data piped straight into your widgets. Always current, always accurate.",
     icon: (
-      <svg className="h-6 w-6 text-emerald-500 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <svg className="h-6 w-6 text-[#fac421]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.79M12 12h.008v.007H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
       </svg>
     ),
@@ -34,7 +34,7 @@ const features = [
     title: "One Script. Done.",
     description: "No build step, no npm install, no config files. Paste the snippet, set your attributes, ship it.",
     icon: (
-      <svg className="h-6 w-6 text-rose-500 dark:text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <svg className="h-6 w-6 text-[#fac421]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
       </svg>
     ),
@@ -80,11 +80,6 @@ export default function Home() {
 
         {/* Hero */}
         <section className="mx-auto max-w-4xl px-6 pt-24 pb-20 text-center md:pt-36 md:pb-28">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-4 py-1.5 text-xs font-medium text-zinc-500 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-400">
-            <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500 dark:bg-emerald-400" />
-            Now in development
-          </div>
-
           <h1 className="text-5xl font-extrabold leading-[1.1] tracking-tight md:text-7xl">
             <span className="text-zinc-900 dark:text-white">Sports widgets</span>
             <br />
@@ -99,7 +94,7 @@ export default function Home() {
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
               href="/login"
-              className="glow-purple rounded-lg bg-violet-600 px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-violet-500"
+              className="glow-brand rounded-lg bg-[#fac421] px-6 py-3 text-sm font-semibold text-black transition-all hover:bg-[#ffe066]"
             >
               Get Early Access
             </Link>
@@ -123,7 +118,7 @@ export default function Home() {
             >
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800/80">{f.icon}</div>
               <h3 className="mb-2 text-base font-semibold text-zinc-800 dark:text-zinc-100">{f.title}</h3>
-              <p className="text-sm leading-relaxed text-zinc-500 dark:text-zinc-500">{f.description}</p>
+              <p className="text-sm leading-relaxed text-zinc-500">{f.description}</p>
             </div>
           ))}
         </div>
@@ -139,12 +134,12 @@ export default function Home() {
               key={w.name}
               className={`rounded-xl border px-4 py-3 text-center text-sm font-medium transition-colors ${
                 w.mvp
-                  ? "border-violet-300 bg-violet-50 text-violet-700 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-300"
+                  ? "border-[#fac421]/30 bg-[#fac421]/10 text-[#b8960a] dark:text-[#fac421]"
                   : "border-zinc-200 bg-zinc-50 text-zinc-400 dark:border-zinc-800 dark:bg-zinc-900/30 dark:text-zinc-600"
               }`}
             >
               {w.name}
-              {w.mvp && <span className="ml-2 text-[10px] font-bold uppercase tracking-wider text-violet-500 dark:text-violet-400">MVP</span>}
+              {w.mvp && <span className="ml-2 text-[10px] font-bold uppercase tracking-wider text-[#d4a50e] dark:text-[#fac421]">MVP</span>}
             </div>
           ))}
         </div>
@@ -155,7 +150,7 @@ export default function Home() {
         <h2 className="mb-2 text-center text-2xl font-bold text-zinc-900 dark:text-white">Two Lines of HTML</h2>
         <p className="mb-10 text-center text-sm text-zinc-500">Paste this into any page. That&apos;s the entire integration.</p>
 
-        <div className="glow-purple rounded-2xl border border-zinc-200 bg-zinc-50 p-5 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/60">
+        <div className="glow-brand rounded-2xl border border-zinc-200 bg-zinc-50 p-5 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/60">
           {/* Fake terminal bar */}
           <div className="mb-4 flex items-center gap-2">
             <span className="h-3 w-3 rounded-full bg-zinc-300 dark:bg-zinc-700" />
@@ -186,12 +181,12 @@ export default function Home() {
       {/* CTA */}
       <section className="mx-auto max-w-2xl px-6 py-20 text-center">
         <h2 className="text-3xl font-bold text-zinc-900 md:text-4xl dark:text-white">
-          Ready to <span className="text-gradient-amber">ship widgets</span>?
+          Ready to <span className="text-gradient-cta">ship widgets</span>?
         </h2>
         <p className="mt-4 text-zinc-500">Sign up for early access and start embedding in minutes.</p>
         <Link
           href="/login"
-          className="glow-amber mt-8 inline-block rounded-lg bg-amber-500 px-8 py-3.5 text-sm font-bold text-black transition-all hover:bg-amber-400"
+          className="glow-brand mt-8 inline-block rounded-lg bg-[#fac421] px-8 py-3.5 text-sm font-bold text-black transition-all hover:bg-[#ffe066]"
         >
           Get Started Free
         </Link>
