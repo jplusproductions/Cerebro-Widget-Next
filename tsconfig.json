@@ -19,7 +19,13 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*":           ["./*"],
+      "@AppComps/*":   ["apps-comps/*"],
+      "@AppConfigs/*": ["apps-configs/*"],
+      "@AppModules/*": ["apps-modules/*"],
+      "@AppStates/*":  ["apps-states/*"],
+      "@AppTypes/*":   ["apps-types/*"],
+      "@AppUtils/*":   ["apps-utils/*"]
     }
   },
   "include": [
