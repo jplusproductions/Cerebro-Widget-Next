@@ -18,14 +18,15 @@
         "name": "next"
       }
     ],
+    "baseUrl": "./",
     "paths": {
-      "@/*":           ["./*"],
-      "@AppComps/*":   ["apps-comps/*"],
+      "@/*": ["*"],
+      "@AppComps/*": ["apps-comps/*"],
       "@AppConfigs/*": ["apps-configs/*"],
       "@AppModules/*": ["apps-modules/*"],
-      "@AppStates/*":  ["apps-states/*"],
-      "@AppTypes/*":   ["apps-types/*"],
-      "@AppUtils/*":   ["apps-utils/*"]
+      "@AppStates/*": ["apps-states/*"],
+      "@AppTypes/*": ["apps-types/*"],
+      "@AppUtils/*": ["apps-utils/*"],
     }
   },
   "include": [

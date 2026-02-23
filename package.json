@@ -3,13 +3,34 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "yarn env:local && next dev --experimental-https",
+    "dev:http": "yarn env:local && next dev",
+    "dev:https": "yarn env:local && next dev --experimental-https",
+    "dev:remote-dev": "yarn env:dev && next dev --experimental-https",
+    "dev:remote-prod": "yarn env:prod && next dev --experimental-https",
+    "build": "yarn env:local && next build",
+    "build:dev": "yarn env:dev && next build",
+    "build:prod": "yarn env:prod && next build",
+    "db:clear": "rimraf ./prisma/zod",
+    "db:init-dev": "yarn env:dev && tsx ./prisma/runDBInitialization.ts",
+    "db:init-prod": "yarn env:prod && tsx ./prisma/runDBInitialization.ts",
+    "db:init:local": "yarn env:local && tsx ./prisma/runDBInitialization.ts",
+    "db:generate": "yarn env:local && prisma generate",
+    "db:migrate": "yarn env:local && prisma migrate dev --name \"@(date +%s)\"",
+    "db:migrate-dev": "yarn env:dev && tsx ./prisma/runDBMigration.ts",
+    "db:migrate-prod": "yarn env:prod && tsx ./prisma/runDBMigration.ts",
+    "db:reset": "rimraf ./prisma/zod && yarn env:local && prisma migrate reset",
+    "db:reset-dev": "rimraf ./prisma/zod && yarn env:dev && prisma migrate reset",
+    "env:dev": "cross-env NEXT_PUBLIC_BUILD_ENV=dev tsx apps-configs/env-builder.ts",
+    "env:prod": "cross-env NEXT_PUBLIC_BUILD_ENV=prod tsx apps-configs/env-builder.ts",
+    "env:local": "cross-env NEXT_PUBLIC_BUILD_ENV=local tsx apps-configs/env-builder.ts",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "chalk-scripts": "^2.0.0",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.3.1",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
@@ -22,6 +43,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

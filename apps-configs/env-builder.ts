@@ -4,13 +4,11 @@ import dotenv from "dotenv"
 import { fileURLToPath } from "url"
 import { scripts } from "chalk-scripts"
 
-// Reconstruct __dirname for ESM
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
 // Application Architecture || Define Variables
 // =======================================================================================
-// =======================================================================================
+// Reconstruct __dirname for ESM =========================================================
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 dotenv.config({ path: path.resolve(process.cwd(), ".env") })
 const BUILD_ENV = process.env.NEXT_PUBLIC_BUILD_ENV
 const script = scripts({ name: `env:${BUILD_ENV || "unknown"}` })
