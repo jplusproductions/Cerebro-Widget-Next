@@ -1,6 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import ThemeToggle from "@/app/components/theme-toggle";
+import Image from "next/image"
+import Link from "next/link"
+import ThemeToggle from "@/app/components/theme-toggle"
 
 const features = [
   {
@@ -39,7 +39,7 @@ const features = [
       </svg>
     ),
   },
-];
+]
 
 const widgetTypes = [
   { name: "Standings", mvp: true },
@@ -54,7 +54,7 @@ const widgetTypes = [
   { name: "Team Schedule", mvp: false },
   { name: "Transfers", mvp: false },
   { name: "Bracket", mvp: false },
-];
+]
 
 export default function Home() {
   return (
@@ -162,15 +162,15 @@ export default function Home() {
             <code>
               <span className="code-comment">{"<!-- 1. Add the script -->"}</span>{"\n"}
               <span className="code-tag">{"<script"}</span>{" "}
-              <span className="code-attr">src</span>=<span className="code-val">{'"https://cdn.cerebro.dev/widget.js"'}</span>{" "}
+              <span className="code-attr">src</span>=<span className="code-val">{"\"https://cdn.cerebro.dev/widget.js\""}</span>{" "}
               <span className="code-attr">defer</span>
               <span className="code-tag">{">"}</span>
               <span className="code-tag">{"</script>"}</span>{"\n\n"}
               <span className="code-comment">{"<!-- 2. Drop in a widget -->"}</span>{"\n"}
               <span className="code-tag">{"<div"}</span>{"\n"}
-              {"  "}<span className="code-attr">data-cerebro-widget</span>=<span className="code-val">{'"standings"'}</span>{"\n"}
-              {"  "}<span className="code-attr">data-cerebro-league</span>=<span className="code-val">{'"sr:tournament:17"'}</span>{"\n"}
-              {"  "}<span className="code-attr">data-cerebro-theme</span>=<span className="code-val">{'"dark"'}</span>{"\n"}
+              {"  "}<span className="code-attr">data-cerebro-widget</span>=<span className="code-val">{"\"standings\""}</span>{"\n"}
+              {"  "}<span className="code-attr">data-cerebro-league</span>=<span className="code-val">{"\"sr:tournament:17\""}</span>{"\n"}
+              {"  "}<span className="code-attr">data-cerebro-theme</span>=<span className="code-val">{"\"dark\""}</span>{"\n"}
               <span className="code-tag">{">"}</span>
               <span className="code-tag">{"</div>"}</span>
             </code>
@@ -197,5 +197,5 @@ export default function Home() {
         Cerebro &mdash; Embeddable Sports Widgets
       </footer>
     </div>
-  );
+  )
 }

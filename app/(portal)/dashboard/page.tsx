@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
 /* ── Mock Data ── */
 const mockApiCalls = [
@@ -9,7 +9,7 @@ const mockApiCalls = [
   { endpoint: "/api/standings/sr:tournament:8", status: 500, timestamp: "2026-02-21 14:30:12" },
   { endpoint: "/api/fixtures/sr:tournament:8", status: 200, timestamp: "2026-02-21 14:29:58" },
   { endpoint: "/api/standings/sr:tournament:35", status: 200, timestamp: "2026-02-21 14:28:33" },
-];
+]
 
 const mockTests = [
   { name: "Widget loader initializes", passed: true },
@@ -17,13 +17,13 @@ const mockTests = [
   { name: "Fixtures data renders", passed: true },
   { name: "Shadow DOM isolation", passed: false },
   { name: "Dark mode toggle", passed: true },
-];
+]
 
 const mockWebsites = [
   { domain: "example-sports.com", status: "Active", dateAdded: "2026-01-15" },
   { domain: "my-football-blog.net", status: "Active", dateAdded: "2026-02-01" },
   { domain: "local-league.org", status: "Pending", dateAdded: "2026-02-18" },
-];
+]
 
 /* ── Components ── */
 function SectionHeader({ title, action }: { title: string; action?: React.ReactNode }) {
@@ -32,7 +32,7 @@ function SectionHeader({ title, action }: { title: string; action?: React.ReactN
       <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">{title}</h3>
       {action}
     </div>
-  );
+  )
 }
 
 function Badge({ passed }: { passed: boolean }) {
@@ -46,11 +46,11 @@ function Badge({ passed }: { passed: boolean }) {
     >
       {passed ? "Pass" : "Fail"}
     </span>
-  );
+  )
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const isActive = status === "Active";
+  const isActive = status === "Active"
   return (
     <span
       className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
@@ -61,27 +61,27 @@ function StatusBadge({ status }: { status: string }) {
     >
       {status}
     </span>
-  );
+  )
 }
 
 function HttpStatus({ code }: { code: number }) {
-  const ok = code >= 200 && code < 300;
+  const ok = code >= 200 && code < 300
   return (
     <span className={`font-mono text-sm ${ok ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
       {code}
     </span>
-  );
+  )
 }
 
 /* ── Page ── */
 export default function DashboardPage() {
-  const [testResults, setTestResults] = useState(mockTests);
+  const [testResults, setTestResults] = useState(mockTests)
 
   function runTests() {
     // Simulate re-running tests with random pass/fail
     setTestResults((prev) =>
       prev.map((t) => ({ ...t, passed: Math.random() > 0.2 }))
-    );
+    )
   }
 
   return (
@@ -168,5 +168,5 @@ export default function DashboardPage() {
         </div>
       </section>
     </div>
-  );
+  )
 }

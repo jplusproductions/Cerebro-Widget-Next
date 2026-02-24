@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator zod {
+  provider                         = "zod-prisma-types"
+  output                           = "./generated/zod" // (default) the directory where generated zod schemas will be saved
+  useMultipleFiles                 = false // default is false
+  writeBarrelFiles                 = true // default is true
+  createInputTypes                 = true // default is true
+  createModelTypes                 = true // default is true
+  addInputTypeValidation           = true // default is true
+  addIncludeType                   = true // default is true
+  addSelectType                    = true // default is true
+  validateWhereUniqueInput         = true // default is true
+  createOptionalDefaultValuesTypes = false // default is false
+  createRelationValuesTypes        = false // default is false
+  createPartialTypes               = false // default is false
+  useDefaultValidators             = false // default is true
+  coerceDate                       = true // default is true
+  writeNullishInModelTypes         = true // default is false
+}
+
+// User Management Models
+// =======================================================================================
+// =======================================================================================
+model User {
+  userId String @id @default(uuid()) @db.Uuid
+  email  String @unique @db.VarChar(256)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  AuthSessions   AuthSession[]
+  AuthStrategies AuthStrategy[]
+
+  @@map(name: "Users")
+}
+
+model AuthStrategy {
+  authStrategyId String            @id @default(uuid()) @db.Uuid
+  type           EAuthStrategyType
+  password       String?           @db.VarChar(256) // For LOCAL strategy - hashed password
+  providerId     String?           @db.VarChar(256) // For OAuth strategy - Google ID, Facebook ID, etc.
+
+  User   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId String @db.Uuid
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  // One strategy per provider per user
+  @@unique([userId, type])
+  @@map(name: "AuthStrategies")
+}
+
+model AuthSession {
+  authSessionId String @id @default(uuid()) @db.Uuid
+  userId        String @db.Uuid
+  token         String @unique
+
+  User User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  expiresAt DateTime // forced so jwtConstruction() avoids defaults
+  createdAt DateTime // forced so jwtConstruction() avoids defaults
+  updatedAt DateTime // forced so jwtConstruction() avoids defaults
+
+  // Unique methord to location session without authSessionId
+  @@unique([userId, createdAt])
+  @@map(name: "AuthSessions")
+}
+
+enum EAuthStrategyType {
+  LOCAL
+}

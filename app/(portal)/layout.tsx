@@ -1,19 +1,19 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import ThemeToggle from "@/app/components/theme-toggle";
+import Link from "next/link"
+import Image from "next/image"
+import { usePathname } from "next/navigation"
+import ThemeToggle from "@/app/components/theme-toggle"
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard" },
   { label: "Websites", href: "/websites" },
   { label: "API Calls", href: "/api-calls" },
   { label: "Tests", href: "/tests" },
-];
+]
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <div className="flex min-h-screen bg-zinc-50 dark:bg-zinc-950">
@@ -25,7 +25,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         </div>
         <nav className="flex flex-1 flex-col gap-1 px-3 pt-2">
           {navItems.map((item) => {
-            const active = pathname === item.href;
+            const active = pathname === item.href
             return (
               <Link
                 key={item.href}
@@ -38,7 +38,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
               >
                 {item.label}
               </Link>
-            );
+            )
           })}
         </nav>
       </aside>
@@ -66,5 +66,5 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         <main className="flex-1 p-6">{children}</main>
       </div>
     </div>
-  );
+  )
 }

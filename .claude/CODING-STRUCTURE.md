@@ -10,7 +10,7 @@ Headers visually separate concerns and enforce a predictable reading order.
 Each section is delimited by a two-line comment block:
 
 ```ts
-// Application Component || <Section Name>
+// Application Architecture || <Section Name>
 // =======================================================================================
 // =======================================================================================
 ```
@@ -41,7 +41,7 @@ import { useForm } from "react-hook-form"
 Local / project imports using path aliases (`@AppComps/*`, `@AppUtils/*`, etc.) or relative paths.
 
 ```ts
-// Application Component || Define Imports
+// Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
 import { Button } from "@AppComps/Button"
@@ -52,7 +52,7 @@ import { formatDate } from "@AppUtils/cross/formatters"
 State management imports and store references (Zustand stores, context providers, etc.).
 
 ```ts
-// Application Component || Define States
+// Application Architecture || Define States
 // =======================================================================================
 // =======================================================================================
 import { useAuthStore } from "@AppStates/auth"
@@ -62,7 +62,7 @@ import { useAuthStore } from "@AppStates/auth"
 One-off configuration values, constants derived from node module imports, or static config objects.
 
 ```ts
-// Application Component || Define Configs
+// Application Architecture || Define Configs
 // =======================================================================================
 // =======================================================================================
 const schema = z.object({ name: z.string().min(1) })
@@ -84,7 +84,7 @@ function calculateTotal(items: CartItem[]) {
 The primary export of the file — the component, page, API handler, or module default.
 
 ```ts
-// Application Component || Define Exports
+// Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
 export default function AboutPage() {
@@ -101,7 +101,7 @@ TypeScript interfaces, types, and type aliases used within the file. Placed last
 exported component/function reads cleanly without type noise above it.
 
 ```ts
-// Application Component || Define Typologies
+// Application Architecture || Define Typologies
 // =======================================================================================
 // =======================================================================================
 interface CartItem {
@@ -120,18 +120,18 @@ import React from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-// Application Component || Define Imports
+// Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
 import { Button } from "@AppComps/Button"
 import { useAuthStore } from "@AppStates/auth"
 
-// Application Component || Define States
+// Application Architecture || Define States
 // =======================================================================================
 // =======================================================================================
 import { useCartStore } from "@AppStates/cart"
 
-// Application Component || Define Configs
+// Application Architecture || Define Configs
 // =======================================================================================
 // =======================================================================================
 const formSchema = z.object({ quantity: z.number().min(1) })
@@ -143,7 +143,7 @@ function formatPrice(cents: number) {
   return `$${(cents / 100).toFixed(2)}`
 }
 
-// Application Component || Define Exports
+// Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
 export default function CheckoutPage() {
@@ -160,7 +160,7 @@ export default function CheckoutPage() {
   )
 }
 
-// Application Component || Define Typologies
+// Application Architecture || Define Typologies
 // =======================================================================================
 // =======================================================================================
 interface CartItem {

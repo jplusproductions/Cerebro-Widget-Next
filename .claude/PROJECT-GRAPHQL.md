@@ -20,47 +20,47 @@ Content-Type: application/json
 ## Table Schemas
 
 ### competitions
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid | PK |
-| name | text | |
-| sport | text | e.g. "basketball" |
+| Column | Type | Notes             |
+|--------|------|-------------------|
+| id     | uuid | PK                |
+| name   | text |                   |
+| sport  | text | e.g. "basketball" |
 
 ### seasons
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid | PK |
-| competition_id | uuid | FK → competitions |
-| name_local | text | |
-| year | integer | |
+| Column         | Type    | Notes             |
+|----------------|---------|-------------------|
+| id             | uuid    | PK                |
+| competition_id | uuid    | FK → competitions |
+| name_local     | text    |                   |
+| year           | integer |                   |
 
 ### fixtures
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid | PK |
-| season_id | uuid | FK → seasons |
-| fixture_type | text | REGULAR, PLAYOFF, etc. |
-| start_time_utc | timestamptz | |
-| start_time_local | timestamp | |
-| timezone | text | |
-| status | text | SCHEDULED, IN_PROGRESS, FINISHED |
-| status_label | text | nullable display label |
-| venue | text | |
-| venue_id | uuid | |
+| Column           | Type        | Notes                            |
+|------------------|-------------|----------------------------------|
+| id               | uuid        | PK                               |
+| season_id        | uuid        | FK → seasons                     |
+| fixture_type     | text        | REGULAR, PLAYOFF, etc.           |
+| start_time_utc   | timestamptz |                                  |
+| start_time_local | timestamp   |                                  |
+| timezone         | text        |                                  |
+| status           | text        | SCHEDULED, IN_PROGRESS, FINISHED |
+| status_label     | text        | nullable display label           |
+| venue            | text        |                                  |
+| venue_id         | uuid        |                                  |
 
 ### competitors
-| Column | Type | Notes |
-|--------|------|-------|
-| id | uuid | PK |
-| fixture_id | uuid | FK → fixtures |
-| entity_id | uuid | nullable (unknown teams) |
-| name | text | |
-| code | text | nullable abbreviation |
-| is_home | boolean | |
-| score | text | nullable |
-| logo | text | nullable URL |
-| color_primary | text | hex without # |
-| color_secondary | text | hex without # |
+| Column          | Type    | Notes                    |
+|-----------------|---------|--------------------------|
+| id              | uuid    | PK                       |
+| fixture_id      | uuid    | FK → fixtures            |
+| entity_id       | uuid    | nullable (unknown teams) |
+| name            | text    |                          |
+| code            | text    | nullable abbreviation    |
+| is_home         | boolean |                          |
+| score           | text    | nullable                 |
+| logo            | text    | nullable URL             |
+| color_primary   | text    | hex without #            |
+| color_secondary | text    | hex without #            |
 
 ## Example Queries
 
