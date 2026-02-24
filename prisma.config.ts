@@ -5,13 +5,7 @@ import { defineConfig, env } from "prisma/config"
 // =======================================================================================
 // =======================================================================================
 export default defineConfig({
-  earlyAccess: true,
   schema: "prisma/schema.prisma",
-  migrate: {
-    async createDatabase(info) {
-      return false
-    },
-  },
   datasource: {
     url: env("DATABASE_URL"),
   },

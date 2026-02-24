@@ -1,8 +1,9 @@
 "use client"
-
 import { useState } from "react"
 
-/* ── Mock Data ── */
+// Application Architecture || Define Variables
+// =======================================================================================
+// =======================================================================================
 const mockApiCalls = [
   { endpoint: "/api/standings/sr:tournament:17", status: 200, timestamp: "2026-02-21 14:32:01" },
   { endpoint: "/api/fixtures/sr:tournament:17", status: 200, timestamp: "2026-02-21 14:31:45" },
@@ -73,8 +74,10 @@ function HttpStatus({ code }: { code: number }) {
   )
 }
 
-/* ── Page ── */
-export default function DashboardPage() {
+// Application Architecture || Define Exports
+// =======================================================================================
+// =======================================================================================
+export default function PortalDashboardPage() {
   const [testResults, setTestResults] = useState(mockTests)
 
   function runTests() {

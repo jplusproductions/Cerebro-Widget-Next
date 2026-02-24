@@ -19,7 +19,7 @@ export const AuthLogout = publicProcedure
   })
   .input(AuthLogoutInputs)
   .output(AuthLogoutOutputs)
-  .mutation(async ({ ctx: { token } }) => {
+  .mutation(async ({ }) => {
     return {
       message: "Logout Successful"
     }

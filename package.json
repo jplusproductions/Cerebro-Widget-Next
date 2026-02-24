@@ -8,9 +8,10 @@
     "dev:https": "yarn env:local && next dev --experimental-https",
     "dev:remote-dev": "yarn env:dev && next dev --experimental-https",
     "dev:remote-prod": "yarn env:prod && next dev --experimental-https",
-    "build": "yarn env:local && next build",
+    "build": "next build",
     "build:dev": "yarn env:dev && next build",
     "build:prod": "yarn env:prod && next build",
+    "build:local": "yarn env:local && next build",
     "db:clear": "rimraf ./prisma/zod",
     "db:init-dev": "yarn env:dev && tsx ./prisma/runDBInitialization.ts",
     "db:init-prod": "yarn env:prod && tsx ./prisma/runDBInitialization.ts",
@@ -31,8 +32,11 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "7",
+    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-table": "^8.21.3",
     "@trpc/client": "^11.10.0",
     "@trpc/server": "^11.10.0",
+    "@trpc/tanstack-react-query": "^11.10.0",
     "axios": "^1.13.5",
     "better-auth": "^1.4.19",
     "chalk-scripts": "^2.0.0",
@@ -43,8 +47,7 @@
     "react-dom": "19.2.3",
     "superjson": "^2.2.6",
     "trpc-swagger": "^2.0.0",
-    "zod": "^4.3.6",
-    "zod-prisma-types": "^3.3.11"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

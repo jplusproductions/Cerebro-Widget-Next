@@ -22,6 +22,13 @@ export const publicProcedure = procedure.use(async ({ next }) => {
   return next()
 })
 
+// Application Architecture || Define Public Procedures
+// =======================================================================================
+// =======================================================================================
+export const whiteListProcedure = procedure.use(async ({ next }) => {
+  return next()
+})
+
 // Application Architecture || Define Protected Procedures
 // =======================================================================================
 // =======================================================================================
@@ -29,11 +36,7 @@ export const protectedProcedure = procedure.use(async ({ ctx, next }) => {
   if (!ctx.session) {
     throw new TRPCError({ code: "UNAUTHORIZED", message: "Not authenticated" })
   }
-  return next({
-    ctx: {
-      session: ctx.session,
-    },
-  })
+  return next()
 })
 
 // Application Architecture || Define Protected Procedures

@@ -13,7 +13,7 @@ export class CerebroGraphqlApi {
   constructor() {
     this.auth = new CerebroAuthApi()
     this.client = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_CEREBRO_GRAPHQL,
+      baseURL: `${process.env.NEXT_PUBLIC_CEREBRO_GRAPHQL}/v1/graphql`,
       headers: { "Content-Type": "application/json" },
     })
 

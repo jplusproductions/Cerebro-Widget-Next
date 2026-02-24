@@ -21,6 +21,7 @@ export const AuthRegisterLocal = publicProcedure
   })
   .input(AuthRegisterLocalInputs)
   .output(AuthRegisterLocalOutputs)
+  // @ts-ignore
   .mutation(async ({ input }) => {
     const result = await BetterAuth.api.signUpEmail({
       body: {

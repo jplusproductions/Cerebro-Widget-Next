@@ -20,6 +20,7 @@ export const ProfileRead = protectedProcedure
   })
   .input(ProfileReadInputs)
   .output(ProfileReadOutputs)
+  // @ts-ignore
   .query(async ({ ctx }) => {
-    return ctx.session.user
+    return ctx?.session?.user
   })

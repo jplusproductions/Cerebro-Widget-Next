@@ -15,17 +15,19 @@ export class CerebroAuthApi {
 
   /** Login with email/password → returns JWT + refresh token */
   async login(email: string, password: string): Promise<CerebroAuthTokens> {
-    const { data } = await this.client.get("/api/login", {
-      params: { email, password },
-    })
+    const url = `/api/login/email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+    console.log(`[CerebroAuth] curl -X GET "${this.client.defaults.baseURL}${url}"`)
+    const { data } = await this.client.get(url)
+    console.log("[CerebroAuth] login response:", JSON.stringify(data, null, 2))
     return data
   }
 
   /** Refresh an expired JWT using the refresh token */
   async refresh(refreshToken: string): Promise<CerebroAuthTokens> {
-    const { data } = await this.client.get("/api/refresh", {
-      params: { refreshToken },
-    })
+    const url = `/api/refresh/refreshToken=${encodeURIComponent(refreshToken)}`
+    console.log(`[CerebroAuth] curl -X GET "${this.client.defaults.baseURL}${url}"`)
+    const { data } = await this.client.get(url)
+    console.log("[CerebroAuth] refresh response:", JSON.stringify(data, null, 2))
     return data
   }
 }

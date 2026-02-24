@@ -1,17 +1,24 @@
 "use client"
-
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
+
+// Application Architecture || Define Imports
+// =======================================================================================
+// =======================================================================================
 import ThemeToggle from "@/app/components/theme-toggle"
 
+// Application Architecture || Define Variables
+// =======================================================================================
+// =======================================================================================
 const navItems = [
   { label: "Dashboard", href: "/dashboard" },
-  { label: "Websites", href: "/websites" },
-  { label: "API Calls", href: "/api-calls" },
-  { label: "Tests", href: "/tests" },
+  { label: "Players", href: "/players" },
 ]
 
+// Application Architecture || Define Exports
+// =======================================================================================
+// =======================================================================================
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
@@ -63,7 +70,9 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         </header>
 
         {/* Content */}
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6">
+          {children}
+        </main>
       </div>
     </div>
   )
