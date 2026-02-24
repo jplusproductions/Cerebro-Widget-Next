@@ -7,7 +7,7 @@ import { prisma } from "@/prisma"
 // =======================================================================================
 // =======================================================================================
 export const BetterAuth = betterAuth({
-  baseURL: process.env.DATABASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_DEFAULT_DOMAIN,
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
