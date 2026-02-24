@@ -46,14 +46,16 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "superjson": "^2.2.6",
+    "swagger-ui-react": "^5.31.2",
     "trpc-swagger": "^2.0.0",
-    "zod": "^4.3.6"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/swagger-ui-react": "^5.18.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "prisma": "7",

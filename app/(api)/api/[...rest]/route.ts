@@ -1,4 +1,4 @@
-import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
+import { createOpenApiFetchHandler } from "trpc-swagger"
 
 // Application Architecture || Define Imports
 // =======================================================================================
@@ -6,16 +6,20 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
 import { AppRouter } from "@/server/trpc-routers"
 import { createTRPCContext } from "@/server/trpc-contexts/context-auth"
 
-// Application Architecture || Define Exports
+// Application Architecture || Define Handler
 // =======================================================================================
-// =======================================================================================
-const tRPCRouteHandler = (req: Request) => {
-  const path = new URL(req.url).pathname.replace("/api/trpc/", "")
-  return fetchRequestHandler({
+// NOTE: Assign REST Request Behavior ====================================================
+const restRouteHandler = (req: Request) => {
+  const path = new URL(req.url).pathname.replace("/api/", "")
+  return createOpenApiFetchHandler({
     req,
     router: AppRouter,
-    endpoint: "/api/trpc",
+    endpoint: "/api",
     createContext: () => createTRPCContext({ headers: req.headers, path }),
+    cors: {
+      origin: "*", // Allow all sources
+      methods: ["*"], // This resolves to "GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD"
+    },
   })
 }
 
@@ -23,9 +27,9 @@ const tRPCRouteHandler = (req: Request) => {
 // =======================================================================================
 // =======================================================================================
 export {
-  tRPCRouteHandler as DELETE,
-  tRPCRouteHandler as GET,
-  tRPCRouteHandler as PATCH,
-  tRPCRouteHandler as POST,
-  tRPCRouteHandler as PUT,
+  restRouteHandler as DELETE,
+  restRouteHandler as GET,
+  restRouteHandler as PATCH,
+  restRouteHandler as POST,
+  restRouteHandler as PUT,
 }
