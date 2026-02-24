@@ -15,7 +15,7 @@ function WidgetRouter() {
   const view = searchParams.get("view")
   const pageSize = Number(searchParams.get("pageSize")) || 25
   const search = searchParams.get("search") || ""
-  const theme = searchParams.get("theme") || "dark"
+  const theme = searchParams.get("theme") || "light"
 
   const isDark = theme === "dark"
 
