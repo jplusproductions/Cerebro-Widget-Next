@@ -26,9 +26,16 @@ export const BetterAuth = betterAuth({
 // =======================================================================================
 // =======================================================================================
 export async function createTRPCContext(opts: { headers: Headers, path?: string }) {
-  const session = await BetterAuth.api.getSession({
-    headers: opts.headers,
-  })
+  let session: Awaited<ReturnType<typeof BetterAuth.api.getSession>> | null = null
+
+  try {
+    session = await BetterAuth.api.getSession({
+      headers: opts.headers,
+    })
+  } catch {
+    // Session lookup may fail if the database is unreachable;
+    // whitelist routes should still work without a session.
+  }
 
   const functionName = opts.path ? `${opts.path.split(".").pop()}()` : "Unknown()"
   const script = scripts({ id: session?.user.id ?? "xxxxxxxx", name: functionName })
