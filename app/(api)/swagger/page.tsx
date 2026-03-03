@@ -9,7 +9,7 @@ import SwaggerUI from "swagger-ui-react"
 export default function SwaggerPage() {
   return (
     <div className="light bg-white min-h-screen">
-      <SwaggerUI url="/api/openapi" />
+      <SwaggerUI url="/swagger.json" />
     </div>
   )
 }

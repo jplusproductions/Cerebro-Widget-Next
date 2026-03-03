@@ -8,7 +8,7 @@ export class CerebroAuthApi {
 
   constructor() {
     this.client = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_CEREBRO_AUTH,
+      baseURL: process.env.NEXT_PUBLIC_DOMAIN_CEREBRO_AUTH,
       headers: { "Content-Type": "application/json" },
     })
   }

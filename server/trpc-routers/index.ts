@@ -4,6 +4,8 @@ import { router } from "@/server/trpc"
 // =======================================================================================
 // =======================================================================================
 // import { RouterAuth } from "./router-auth/@index"
+import { RouterEvent } from "./router-event/@index"
+import { RouterEvents } from "./router-events/@index"
 import { GraphQLPlayers } from "./router-graphql-players/@index"
 // import { RouterProfile } from "./router-profile/@index"
 
@@ -12,6 +14,8 @@ import { GraphQLPlayers } from "./router-graphql-players/@index"
 // =======================================================================================
 export const AppRouter = router({
   // RouterAuth,
+  RouterEvent,
+  RouterEvents,
   GraphQLPlayers,
   // RouterProfile,
 })
