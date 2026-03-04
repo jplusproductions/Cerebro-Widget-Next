@@ -3,28 +3,37 @@
 // =======================================================================================
 import { whiteListProcedure } from "@/server/trpc"
 import { ExposureClient } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-api"
-import { EventReadInputs, EventReadOutputs } from "./EventReadIO"
+import { GamesListInputs, GamesListOutputs } from "./GamesListIO"
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const EventRead = whiteListProcedure
+export const GamesList = whiteListProcedure
   .meta({
     openapi: {
       method: "GET",
       protect: true,
-      path: "/event/read",
-      summary: "EventRead() -> Returns a single event by ID.",
-      tags: ["Event"],
+      path: "/games/list",
+      summary: "GamesList() -> Returns a list of games.",
+      tags: ["Games"],
     },
   })
-  .input(EventReadInputs)
-  .output(EventReadOutputs)
+  .input(GamesListInputs)
+  .output(GamesListOutputs)
   .query(async ({ input, ctx: { script } }) => {
-    await script.insight("Event read query")
+    await script.insight("Games list query")
 
-    return ExposureClient.getEvent({
-      id: input.id,
-      includes: input.includes,
+    const response = await ExposureClient.getGames({
+      page: input.page,
+      pagesize: input.pageSize,
+      eventid: input.eventId,
+      divisionid: input.divisionId,
+      teamid: input.teamId,
+      date: input.date,
     })
+
+    return {
+      games: response.results,
+      pagination: response.pagination
+    }
   })

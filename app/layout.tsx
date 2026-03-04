@@ -24,11 +24,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: "(function(){try{var t=localStorage.getItem(\"theme\");document.documentElement.classList.toggle(\"dark\",t?t===\"dark\":true)}catch(e){}})()",
+            __html: "(function(){try{var t=localStorage.getItem(\"theme\");document.documentElement.classList.toggle(\"dark\",t===\"dark\")}catch(e){}})()",
           }}
         />
       </head>

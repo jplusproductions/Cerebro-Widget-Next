@@ -1,5 +1,32 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios"
 import { createHmac } from "crypto"
+import {
+  throwExposureError,
+  type ExposureEventsPaginatedResponse,
+  type ExposureEventParams,
+  type ExposureEventsParams,
+  type ExposureDivisionsParams,
+  type ExposureTeamsParams,
+  type ExposureGameParams,
+  type ExposureGamesParams,
+  type ExposureUpdateGameParams,
+  type ExposureStandingsParams,
+  type ExposurePlayersParams,
+  type ExposureStatisticsParams,
+  type ExposureVenuesParams,
+  type ExposureEvent,
+  type ExposureDivision,
+  type ExposureTeam,
+  type ExposureGame,
+  type ExposureStanding,
+  type ExposurePlayer,
+  type ExposureStatistic,
+  type ExposureVenue,
+  type ExposureRegisterPayload,
+  type ExposureRegisterResponse,
+  type ExposurePaymentPayload,
+  type ExposurePaymentResponse,
+} from "./exposure-events-types"
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -32,11 +59,13 @@ export class ExposureEventsApi {
 
     this.client.interceptors.response.use(
       (res) => {
-        if (res.data?.Errors?.length) throw new ExposureEventsError(res.data.Errors)
+        if (res.data?.Errors?.length) throwExposureError(res.data.Errors)
         return res
       },
       (err) => {
-        console.error(`[ExposureEventsApi] ${err.response?.status} ${err.response?.statusText}`, err.response?.data)
+        const data = err.response?.data
+        console.error(`[ExposureEventsApi] ${err.response?.status} ${err.response?.statusText}`, data)
+        if (data?.Errors?.length) throwExposureError(data.Errors)
         throw err
       },
     )
@@ -58,22 +87,33 @@ export class ExposureEventsApi {
     return config
   }
 
+  // Application Architecture || Strip Undefined Params
+  // =====================================================================================
+  private stripUndefined(obj: object): Record<string, unknown> {
+    return Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined))
+  }
+
   // Application Architecture || Pagination Helper
   // =====================================================================================
   private unwrapList<T>(data: Record<string, unknown>, resourceKey: string): ExposureEventsPaginatedResponse<T> {
-    const wrapper = data[resourceKey] as { Results: T[]; Page: number; PageSize: number; Total: number }
+    const wrapper = data[resourceKey] as { Results: T[]; Page: number; PageSize: number; Total: number } | null
+    if (!wrapper) return { results: [], pagination: { page: 1, pageSize: 1, totalPages: 0, totalRecords: 0 } }
     return {
       results: wrapper.Results,
-      page: wrapper.Page,
-      pageSize: wrapper.PageSize,
-      total: wrapper.Total,
+      pagination: {
+        page: wrapper.Page,
+        pageSize: wrapper.PageSize,
+        totalPages: Math.ceil(wrapper.Total / wrapper.PageSize),
+        totalRecords: wrapper.Total,
+      },
     }
   }
 
   // Application Architecture || Events
   // =====================================================================================
   async getEvents(params?: ExposureEventsParams) {
-    const { data } = await this.client.get("/api/v1/events", { params })
+    const cleaned = params ? this.stripUndefined(params) : undefined
+    const { data } = await this.client.get("/api/v1/events", { params: cleaned })
     return this.unwrapList<ExposureEvent>(data, "Events")
   }
 
@@ -120,13 +160,21 @@ export class ExposureEventsApi {
 
   // Application Architecture || Games
   // =====================================================================================
-  async getGames(params?: ExposureGamesParams) {
+  async getGame({ id, includes }: ExposureGameParams) {
+    const params: Record<string, unknown> = { id }
+    if (includes) params.includes = includes
     const { data } = await this.client.get("/api/v1/games", { params })
+    return data.Game as ExposureGame
+  }
+
+  async getGames(params?: ExposureGamesParams) {
+    const cleaned = params ? this.stripUndefined(params) : undefined
+    const { data } = await this.client.get("/api/v1/games", { params: cleaned })
     return this.unwrapList<ExposureGame>(data, "Games")
   }
 
-  async updateGame(body: Partial<ExposureGame>) {
-    const { data } = await this.client.put("/api/v1/games", body)
+  async updateGame(params: ExposureUpdateGameParams) {
+    const { data } = await this.client.put("/api/v1/games", params)
     return data as ExposureGame
   }
 
@@ -176,240 +224,7 @@ export class ExposureEventsApi {
   }
 }
 
-// Application Architecture || Define Typologies
+// Application Architecture || Define Singleton
 // =======================================================================================
 // =======================================================================================
-export class ExposureEventsError extends Error {
-  errors: Array<{ Code: number; Message: string }>
-  constructor(errors: Array<{ Code: number; Message: string }>) {
-    super(errors.map((e) => e.Message).join("; "))
-    this.name = "ExposureEventsError"
-    this.errors = errors
-  }
-}
-
-export interface ExposureEventsPaginatedResponse<T> {
-  results: T[]
-  page: number
-  pageSize: number
-  total: number
-}
-
-// Query Param Interfaces
-// =====================================================================================
-export interface ExposureEventParams {
-  id: number
-  includes?: string
-}
-
-export interface ExposureEventsParams {
-  id?: number
-  page?: number
-  pagesize?: number
-  organizationid?: number
-  parentid?: number
-  startdate?: string
-  enddate?: string
-  type?: string
-  archive?: boolean
-  includes?: string
-}
-
-export interface ExposureDivisionsParams {
-  id?: number
-  eventid?: number
-  page?: number
-  pagesize?: number
-}
-
-export interface ExposureTeamsParams {
-  id?: number
-  eventid?: number
-  divisionid?: number
-  page?: number
-  pagesize?: number
-  status?: string
-  paid?: boolean
-}
-
-export interface ExposureGamesParams {
-  id?: number
-  eventid?: number
-  divisionid?: number
-  teamid?: number
-  date?: string
-  page?: number
-  pagesize?: number
-}
-
-export interface ExposureStandingsParams {
-  eventid: number
-  divisionid?: number
-  bracketid?: number
-  display?: string
-}
-
-export interface ExposurePlayersParams {
-  id?: number
-  eventid?: number
-  divisionid?: number
-  teamids?: string
-  playerids?: string
-  page?: number
-  pagesize?: number
-}
-
-export interface ExposureStatisticsParams {
-  eventid: number
-  divisionid?: number
-  categories?: string
-  pagesize?: number
-}
-
-export interface ExposureVenuesParams {
-  id?: number
-  eventid?: number
-}
-
-export interface ExposureEvent {
-  Id: number
-  Sport: number
-  ParentId: number
-  Gender: number
-  Name: string
-  Archive: boolean
-  Type: number
-  InviteType: number
-  ParticipationType: number
-  Image: string
-  StartDate: string
-  TimeZone: string
-  EndDate: string
-  ContactName: string
-  ContactEmail: string
-  ContactPhone: string
-  InstagramHandle: string
-  TwitterHandle: string
-  Website: string
-  FacebookPage: string
-  TravelWebsite: string
-  Organization: ExposureOrganization
-  Address: ExposureAddress
-  Settings: ExposureSettings
-  Season: ExposureSeason
-  Divisions: ExposureDivision[]
-  Assets: ExposureAsset[]
-  Reports: ExposureReport[]
-  Venues: ExposureVenue[]
-  Prices: ExposurePrice[]
-  Certifications: ExposureCertification[]
-  [key: string]: unknown
-}
-
-export interface ExposureOrganization {
-  Id: number
-  Name: string
-  [key: string]: unknown
-}
-
-export interface ExposureAddress {
-  City: string
-  StateRegion: string
-  Country: string
-  [key: string]: unknown
-}
-
-export interface ExposureSettings {
-  [key: string]: unknown
-}
-
-export interface ExposureSeason {
-  Id: number
-  Name: string
-  [key: string]: unknown
-}
-
-export interface ExposureAsset {
-  Id: number
-  [key: string]: unknown
-}
-
-export interface ExposureReport {
-  Id: number
-  [key: string]: unknown
-}
-
-export interface ExposurePrice {
-  Id: number
-  [key: string]: unknown
-}
-
-export interface ExposureCertification {
-  Id: number
-  [key: string]: unknown
-}
-
-export interface ExposureDivision {
-  Id: number
-  EventId: number
-  Name: string
-  [key: string]: unknown
-}
-
-export interface ExposureTeam {
-  Id: number
-  EventId: number
-  DivisionId: number
-  Name: string
-  [key: string]: unknown
-}
-
-export interface ExposureGame {
-  Id: number
-  EventId: number
-  DivisionId: number
-  [key: string]: unknown
-}
-
-export interface ExposureStanding {
-  TeamId: number
-  EventId: number
-  DivisionId: number
-  [key: string]: unknown
-}
-
-export interface ExposurePlayer {
-  Id: number
-  TeamId: number
-  FirstName: string
-  LastName: string
-  [key: string]: unknown
-}
-
-export interface ExposureStatistic {
-  PlayerId: number
-  [key: string]: unknown
-}
-
-export interface ExposureVenue {
-  Id: number
-  Name: string
-  Address: ExposureAddress
-  [key: string]: unknown
-}
-
-export interface ExposureRegisterPayload {
-  [key: string]: unknown
-}
-
-export interface ExposureRegisterResponse {
-  [key: string]: unknown
-}
-
-export interface ExposurePaymentPayload {
-  [key: string]: unknown
-}
-
-export interface ExposurePaymentResponse {
-  [key: string]: unknown
-}
+export const ExposureClient = new ExposureEventsApi()
