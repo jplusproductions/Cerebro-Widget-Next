@@ -1,16 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
-export default function ThemeToggle() {
-  const [dark, setDark] = useState(true)
-
-  useEffect(() => {
-    const stored = localStorage.getItem("theme")
-    const isDark = stored ? stored === "dark" : true
-    setDark(isDark)
-    document.documentElement.classList.toggle("dark", isDark)
-  }, [])
+// Application Architecture || Define Exports
+// =======================================================================================
+// =======================================================================================
+export default function ThemeToggle({ isDark = false }: ThemeToggleProps = {}) {
+  const [dark, setDark] = useState<boolean>(isDark)
 
   function toggle() {
     const next = !dark
@@ -38,4 +34,11 @@ export default function ThemeToggle() {
       )}
     </button>
   )
+}
+
+// Application Architecture || Define Typologies
+// =======================================================================================
+// =======================================================================================
+interface ThemeToggleProps {
+  isDark?: boolean
 }

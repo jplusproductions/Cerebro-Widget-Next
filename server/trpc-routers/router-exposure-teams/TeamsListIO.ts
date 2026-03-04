@@ -1,43 +1,34 @@
 import { z } from "zod"
-import type { ExposureGame } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
+import type { ExposureTeam } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
 
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { paginationInputs, paginationOutputs, optionalSearch } from "@/prisma/validators/filters"
+import { paginationInputs, paginationOutputs } from "@/prisma/validators/filters"
 
 // Application Architecture || Define Inputs
 // =======================================================================================
 // =======================================================================================
-export const GamesListInputs = z.object({
-  ...optionalSearch.shape,
+export const TeamsListInputs = z.object({
   ...paginationInputs.shape,
-  eventId: z.number()
-    .describe("The event id"),
-  divisionId: z.number().optional()
-    .describe("Filter games by division ID"),
-  teamId: z.number().optional()
-    .describe("Filter games by team ID"),
-  date: z.string().optional()
-    .describe("Filter games by date"),
 })
 
 // Application Architecture || Define Singletons
 // =======================================================================================
 // ===================================================================================
-export const GamesListItem = z.custom<ExposureGame>()
+export const TeamsListItem = z.custom<ExposureTeam>()
 
 // Application Architecture || Define Outputs
 // =======================================================================================
 // =======================================================================================
-export const GamesListOutputs = z.object({
-  games: z.array(GamesListItem),
+export const TeamsListOutputs = z.object({
+  teams: z.array(TeamsListItem),
   pagination: paginationOutputs,
 })
 
 // Application Architecture || Define Typologies
 // =======================================================================================
 // =======================================================================================
-export type TGamesListItem = z.TypeOf<typeof GamesListItem>
-export type TGamesListInputs = z.TypeOf<typeof GamesListInputs>
-export type TGamesListOutputs = z.TypeOf<typeof GamesListOutputs>
+export type TTeamsListItem = z.TypeOf<typeof TeamsListItem>
+export type TTeamsListInputs = z.TypeOf<typeof TeamsListInputs>
+export type TTeamsListOutputs = z.TypeOf<typeof TeamsListOutputs>

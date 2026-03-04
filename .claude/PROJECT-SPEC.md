@@ -41,20 +41,20 @@ Websites embed Cerebro widgets via a script tag and data-attribute-driven contai
 
 ## 3. Widget Types
 
-| # | Widget Type       | Description                        | MVP |
-|---|-------------------|------------------------------------|-----|
-| 1 | `standings`       | League standings table             | Yes |
-| 2 | `fixtures`        | Upcoming/past match list           | Yes |
-| 3 | `live-score`      | Live match score ticker            | No  |
-| 4 | `team-roster`     | Team player roster                 | No  |
-| 5 | `player-stats`    | Individual player statistics       | No  |
-| 6 | `match-detail`    | Single match detail view           | No  |
-| 7 | `league-leaders`  | Top performers in a league         | No  |
-| 8 | `head-to-head`    | H2H comparison between two teams   | No  |
-| 9 | `season-stats`    | Aggregated season statistics       | No  |
-| 10| `team-schedule`   | Single team's schedule             | No  |
-| 11| `transfer-history`| Player/team transfer history       | No  |
-| 12| `tournament-bracket`| Knockout stage bracket view      | No  |
+| # | Widget Type          | Description                        | MVP |
+|---|----------------------|------------------------------------|-----|
+| 1 | `standings`          | League standings table             | Yes |
+| 2 | `schedules`          | Upcoming/past match list           | Yes |
+| 3 | `live-score`         | Live match score ticker            | No  |
+| 4 | `team-roster`        | Team player roster                 | No  |
+| 5 | `player-stats`       | Individual player statistics       | No  |
+| 6 | `match-detail`       | Single match detail view           | No  |
+| 7 | `league-leaders`     | Top performers in a league         | No  |
+| 8 | `head-to-head`       | H2H comparison between two teams   | No  |
+| 9 | `season-stats`       | Aggregated season statistics       | No  |
+| 10| `team-schedule`      | Single team's schedule             | No  |
+| 11| `transfer-history`   | Player/team transfer history       | No  |
+| 12| `tournament-bracket` | Knockout stage bracket view      | No  |
 
 **MVP scope**: `standings` and `fixtures` only.
 
@@ -112,7 +112,7 @@ A Hasura instance backed by PostgreSQL will serve as a caching/aggregation layer
 - Admin login UI (no backend auth)
 - Admin dashboard with mock data (API calls, tests, whitelisted sites)
 - Widget loader script architecture (documented, not yet built)
-- `standings` and `fixtures` widget types
+- `standings` and `schedules` widget types
 - Sportradar REST as data source
 - Shadow DOM isolation
 - Dark/light theme support
@@ -121,7 +121,7 @@ A Hasura instance backed by PostgreSQL will serve as a caching/aggregation layer
 
 - Functional authentication / session management
 - GraphQL / Hasura data layer
-- Widget types beyond standings & fixtures
+- Widget types beyond standings & schedules
 - Payment / billing
 - Multi-tenancy
 - Real-time subscriptions

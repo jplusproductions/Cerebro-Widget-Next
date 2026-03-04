@@ -4,10 +4,12 @@ import { router } from "@/server/trpc"
 // =======================================================================================
 // =======================================================================================
 // import { RouterAuth } from "./router-auth/@index"
-import { RouterEvent } from "./router-event/@index"
-import { RouterEvents } from "./router-events/@index"
-import { RouterGame } from "./router-game/@index"
-import { RouterGames } from "./router-games/@index"
+import { RouterExposureEvent } from "@/server/trpc-routers/router-exposure-event/@index"
+import { RouterExposureEvents } from "@/server/trpc-routers/router-exposure-events/@index"
+import { RouterExposureGame } from "@/server/trpc-routers/router-exposure-game/@index"
+import { RouterExposureGames } from "@/server/trpc-routers/router-exposure-games/@index"
+import { RouterExposureTeam } from "@/server/trpc-routers/router-exposure-team/@index"
+import { RouterExposureTeams } from "@/server/trpc-routers/router-exposure-teams/@index"
 import { GraphQLPlayers } from "./router-graphql-players/@index"
 // import { RouterProfile } from "./router-profile/@index"
 
@@ -16,10 +18,12 @@ import { GraphQLPlayers } from "./router-graphql-players/@index"
 // =======================================================================================
 export const AppRouter = router({
   // RouterAuth,
-  RouterEvent,
-  RouterEvents,
-  RouterGame,
-  RouterGames,
+  RouterExposureEvent,
+  RouterExposureEvents,
+  RouterExposureGame,
+  RouterExposureGames,
+  RouterExposureTeam,
+  RouterExposureTeams,
   GraphQLPlayers,
   // RouterProfile,
 })

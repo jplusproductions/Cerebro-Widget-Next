@@ -78,7 +78,6 @@ export interface ExposureTeamsParams {
 
 export const ExposureGameParamsSchema = z.object({
   id: z.number().describe("The game id"),
-  includes: z.string().optional().describe("Additional data to include in the response, comma-separated"),
 })
 export type ExposureGameParams = z.infer<typeof ExposureGameParamsSchema>
 
@@ -89,7 +88,6 @@ export const ExposureGamesParamsSchema = z.object({
   divisionid: z.number().optional().describe("The division id"),
   teamid: z.number().optional().describe("The team id"),
   date: z.string().optional().describe("The date of the games in m/d/yyyy format"),
-  includes: z.string().optional().describe("Additional data to include in the response, comma-separated"),
 })
 export type ExposureGamesParams = z.infer<typeof ExposureGamesParamsSchema>
 

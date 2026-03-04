@@ -3,11 +3,11 @@ import { router } from "@/server/trpc"
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { EventsList } from "./EventsList"
+import { GamesList } from "./GamesList"
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const RouterEvents = router({
-  EventsList,
+export const RouterExposureGames = router({
+  GamesList,
 })

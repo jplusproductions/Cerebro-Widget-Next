@@ -111,17 +111,16 @@ export class ExposureEventsApi {
 
   // Application Architecture || Events
   // =====================================================================================
+  async getEvent({ id }: { id: number }) {
+    const params: Record<string, unknown> = { id }
+    const { data } = await this.client.get("/api/v1/events", { params })
+    return data.Event as ExposureEvent
+  }
+
   async getEvents(params?: ExposureEventsParams) {
     const cleaned = params ? this.stripUndefined(params) : undefined
     const { data } = await this.client.get("/api/v1/events", { params: cleaned })
     return this.unwrapList<ExposureEvent>(data, "Events")
-  }
-
-  async getEvent({ id, includes }: ExposureEventParams) {
-    const params: Record<string, unknown> = { id }
-    if (includes) params.includes = includes
-    const { data } = await this.client.get("/api/v1/events", { params })
-    return data.Event as ExposureEvent
   }
 
   // Application Architecture || Divisions
@@ -143,6 +142,12 @@ export class ExposureEventsApi {
 
   // Application Architecture || Teams
   // =====================================================================================
+  async getTeam({ id }: { id: number }) {
+    const params: Record<string, unknown> = { id }
+    const { data } = await this.client.get("/api/v1/teams", { params })
+    return data.Team as ExposureTeam
+  }
+
   async getTeams(params?: ExposureTeamsParams) {
     const { data } = await this.client.get("/api/v1/teams", { params })
     return this.unwrapList<ExposureTeam>(data, "Teams")
@@ -160,9 +165,8 @@ export class ExposureEventsApi {
 
   // Application Architecture || Games
   // =====================================================================================
-  async getGame({ id, includes }: ExposureGameParams) {
+  async getGame({ id }: { id: number }) {
     const params: Record<string, unknown> = { id }
-    if (includes) params.includes = includes
     const { data } = await this.client.get("/api/v1/games", { params })
     return data.Game as ExposureGame
   }

@@ -3,40 +3,34 @@
 // =======================================================================================
 import { whiteListProcedure } from "@/server/trpc"
 import { ExposureClient } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-api"
-import { GameReadInputs, GameReadOutputs } from "./GameReadIO"
+import { EventsListInputs, EventsListOutputs } from "./EventsListIO"
 import {TRPCError} from "@trpc/server"
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const GameRead = whiteListProcedure
+export const EventsList = whiteListProcedure
   .meta({
     openapi: {
       method: "GET",
       protect: true,
-      path: "/game/read",
-      summary: "GameRead() -> Returns a single game by ID.",
-      tags: ["Game"],
+      path: "/events/list",
+      summary: "EventsList() -> Returns a list of all events.",
+      tags: ["Events"],
     },
   })
-  .input(GameReadInputs)
-  .output(GameReadOutputs)
+  .input(EventsListInputs)
+  .output(EventsListOutputs)
   .query(async ({ input, ctx: { script } }) => {
-    await script.insight("Game read query")
+    await script.insight("Events list query")
 
-    const response = await ExposureClient.getGame({
-      id: input.id,
-      includes: input.includes,
+    const response = await ExposureClient.getEvents({
+      page: input.page,
+      pagesize: input.pageSize,
     })
 
-    if(!response) {
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "Game could not be found"
-      })
+    return {
+      events: response.results,
+      pagination: response.pagination,
     }
-
-    console.log("response", response)
-
-    return response
   })

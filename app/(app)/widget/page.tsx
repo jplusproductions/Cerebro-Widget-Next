@@ -6,31 +6,23 @@ import { Suspense } from "react"
 // =======================================================================================
 // =======================================================================================
 import WidgetPlayers from "@AppComps/widgets/WidgetPlayers"
+import WidgetSchedule from "@AppComps/widgets/WidgetSchedule"
 
 // Application Architecture || Define Component
 // =======================================================================================
 // =======================================================================================
 function WidgetRouter() {
   const searchParams = useSearchParams()
-  const view = searchParams.get("view")
-  const pageSize = Number(searchParams.get("pageSize")) || 25
+  const view = searchParams.get("view") || "schedule"
   const search = searchParams.get("search") || ""
-  const theme = searchParams.get("theme") || "light"
-
-  const isDark = theme === "dark"
+  const eventId = Number(searchParams.get("eventId")) || 260104
+  const pageSize = Number(searchParams.get("pageSize")) || 10
 
   return (
-    <div className={isDark ? "dark" : ""}>
-      <div className="min-h-screen bg-white dark:bg-zinc-950 p-4">
-        {view === "players" && <WidgetPlayers pageSize={pageSize} search={search} />}
-        {!view && (
-          <p className="text-sm text-zinc-500">Missing <code>view</code> parameter. Try <code>?view=players</code></p>
-        )}
-        {view && view !== "players" && (
-          <p className="text-sm text-zinc-500">Unknown view: <code>{view}</code></p>
-        )}
-      </div>
-    </div>
+    <>
+      {view === "players" && <WidgetPlayers pageSize={pageSize} search={search} />}
+      {view === "schedule" && <WidgetSchedule pageSize={pageSize} eventId={eventId} />}
+    </>
   )
 }
 

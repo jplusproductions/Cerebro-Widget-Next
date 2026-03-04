@@ -20,8 +20,8 @@ export const OpenApiDocument: OpenAPIV3.Document = (() => {
     docsUrl: "https://github.com/vercjames/package-trpc-swagger",
     description: "OpenAPI compliant REST API built using tRPC for Swagger integrations.",
     tags: [
-      { name: "Auth", description: "Authentication - User access, management, and application security." },
-      { name: "Profile", description: "CTX Based - Personal profile management" },
+      // { name: "Auth", description: "Authentication - User access, management, and application security." },
+      // { name: "Profile", description: "CTX Based - Personal profile management" },
     ],
   })
 })()

@@ -3,40 +3,33 @@
 // =======================================================================================
 import { whiteListProcedure } from "@/server/trpc"
 import { ExposureClient } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-api"
-import { EventsListInputs, EventsListOutputs } from "./EventsListIO"
+import { TeamsListInputs, TeamsListOutputs } from "./TeamsListIO"
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const EventsList = whiteListProcedure
+export const TeamsList = whiteListProcedure
   .meta({
     openapi: {
       method: "GET",
       protect: true,
-      path: "/events/list",
-      summary: "EventsList() -> Returns a list of all events.",
-      tags: ["Events"],
+      path: "/teams/list",
+      summary: "TeamsList() -> Returns a list of all teams.",
+      tags: ["Teams"],
     },
   })
-  .input(EventsListInputs)
-  .output(EventsListOutputs)
+  .input(TeamsListInputs)
+  .output(TeamsListOutputs)
   .query(async ({ input, ctx: { script } }) => {
-    await script.insight("Events list query")
+    await script.insight("Teams list query")
 
-    const response = await ExposureClient.getEvents({
+    const response = await ExposureClient.getTeams({
       page: input.page,
       pagesize: input.pageSize,
     })
 
-    let events = response.results
-
-    if (input.search) {
-      const term = input.search.toLowerCase()
-      events = events.filter((e) => e.Name.toLowerCase().includes(term))
-    }
-
     return {
-      events,
+      teams: response.results,
       pagination: response.pagination,
     }
   })

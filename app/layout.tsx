@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Cerebro — Embeddable Sports Widgets",
-  description: "Drop-in sports widgets for any CMS. Standings, fixtures, teams, and more — powered by real-time data.",
+  description: "Drop-in sports widgets for any CMS. Schedule, Standings, teams, and more — powered by real-time data.",
 }
 
 export default function RootLayout({
@@ -32,10 +32,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <AppTRPCProvider>{children}</AppTRPCProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <AppTRPCProvider>
+          {children}
+        </AppTRPCProvider>
       </body>
     </html>
   )

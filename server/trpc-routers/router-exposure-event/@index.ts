@@ -8,6 +8,6 @@ import { EventRead } from "./EventRead"
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const RouterEvent = router({
+export const RouterExposureEvent = router({
   EventRead
 })
