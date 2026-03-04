@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { TRPCError } from "@trpc/server"
-import { ErrorCode } from "./exposure-events-enums"
+import { ErrorCode, StatisticCategory } from "./exposure-events-enums"
 
 // Application Architecture || Error Code to tRPC Code Mapping
 // =======================================================================================
@@ -121,7 +121,7 @@ export interface ExposurePlayersParams {
 export interface ExposureStatisticsParams {
   eventid: number
   divisionid?: number
-  categories?: string
+  categories: StatisticCategory
   pagesize?: number
 }
 

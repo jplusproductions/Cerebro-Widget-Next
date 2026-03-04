@@ -17,8 +17,9 @@ export default function PortalPlayersPage() {
   const [search, setSearch] = useState("")
   const [page, setPage] = useState(1)
 
-  const { data, isLoading, isError } = useQuery(
-    trpc.GraphQLPlayers.PlayersList.queryOptions({ search: search || undefined, page, pageSize: 25 }),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- GraphQLPlayers router removed; needs migration to RouterExposurePlayers
+  const { data, isLoading, isError }: { data: any; isLoading: boolean; isError: boolean } = useQuery(
+    (trpc as any).GraphQLPlayers.PlayersList.queryOptions({ search: search || undefined, page, pageSize: 25 }),
   )
 
   return (

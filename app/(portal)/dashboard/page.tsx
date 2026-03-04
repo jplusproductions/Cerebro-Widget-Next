@@ -6,16 +6,16 @@ import { useState } from "react"
 // =======================================================================================
 const mockApiCalls = [
   { endpoint: "/api/standings/sr:tournament:17", status: 200, timestamp: "2026-02-21 14:32:01" },
-  { endpoint: "/api/fixtures/sr:tournament:17", status: 200, timestamp: "2026-02-21 14:31:45" },
+  { endpoint: "/api/schedules/sr:tournament:17", status: 200, timestamp: "2026-02-21 14:31:45" },
   { endpoint: "/api/standings/sr:tournament:8", status: 500, timestamp: "2026-02-21 14:30:12" },
-  { endpoint: "/api/fixtures/sr:tournament:8", status: 200, timestamp: "2026-02-21 14:29:58" },
+  { endpoint: "/api/schedules/sr:tournament:8", status: 200, timestamp: "2026-02-21 14:29:58" },
   { endpoint: "/api/standings/sr:tournament:35", status: 200, timestamp: "2026-02-21 14:28:33" },
 ]
 
 const mockTests = [
   { name: "Widget loader initializes", passed: true },
   { name: "Standings data renders", passed: true },
-  { name: "Fixtures data renders", passed: true },
+  { name: "Schedules data renders", passed: true },
   { name: "Shadow DOM isolation", passed: false },
   { name: "Dark mode toggle", passed: true },
 ]

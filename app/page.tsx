@@ -5,7 +5,7 @@ import ThemeToggle from "@/app/components/theme-toggle"
 const features = [
   {
     title: "Plug & Play Widgets",
-    description: "Standings, fixtures, live scores — rendered inside any page with zero framework dependencies.",
+    description: "Standings, schedules, live scores — rendered inside any page with zero framework dependencies.",
     icon: (
       <svg className="h-6 w-6 text-[#fac421]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
@@ -43,7 +43,7 @@ const features = [
 
 const widgetTypes = [
   { name: "Standings", mvp: true },
-  { name: "Fixtures", mvp: true },
+  { name: "Schedules", mvp: true },
   { name: "Live Score", mvp: false },
   { name: "Team Roster", mvp: false },
   { name: "Player Stats", mvp: false },
@@ -87,7 +87,7 @@ export default function Home() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-zinc-500 dark:text-zinc-400">
-            Embed live standings, fixtures, and scores into any website.
+            Embed live standings, schedules, and scores into any website.
             One script tag. No dependencies. No headaches.
           </p>
 
@@ -127,7 +127,7 @@ export default function Home() {
       {/* Widget Types */}
       <section className="mx-auto max-w-5xl px-6 py-16">
         <h2 className="mb-2 text-center text-2xl font-bold text-zinc-900 dark:text-white">12 Widget Types</h2>
-        <p className="mb-10 text-center text-sm text-zinc-500">MVP ships with Standings &amp; Fixtures. More coming soon.</p>
+        <p className="mb-10 text-center text-sm text-zinc-500">MVP ships with Standings &amp; Schedules. More coming soon.</p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {widgetTypes.map((w) => (
             <div

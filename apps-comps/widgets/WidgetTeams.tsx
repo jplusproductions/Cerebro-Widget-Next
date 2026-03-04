@@ -6,34 +6,52 @@ import { useQuery } from "@tanstack/react-query"
 // =======================================================================================
 // =======================================================================================
 import { useTRPC } from "@AppComps/@TRPCProvider"
-import Table from "@AppComps/table/Table"
-import { PlayersListColumns } from "@AppComps/table-columns/PlayersListColumn"
 
-// Application Architecture || Define Exports
+// Application Architecture || Define Component
 // =======================================================================================
 // =======================================================================================
-export default function WidgetPlayers({ pageSize }: WidgetPlayersProps) {
+export default function WidgetTeams({ pageSize = 10 }: WidgetTeamsProps) {
   const trpc = useTRPC()
   const [page, setPage] = useState(1)
 
   const { data, isLoading, isError } = useQuery(
-    trpc.RouterExposurePlayers.PlayersList.queryOptions({ page, pageSize, eventId: 260104 }),
+    trpc.RouterExposureTeams.TeamsList.queryOptions({
+      page,
+      pageSize,
+    }),
   )
+
+  const teams = data?.teams ?? []
 
   return (
     <div className="space-y-4">
-      {isError && <p className="text-sm text-red-500">Failed to load players.</p>}
+      {isLoading && <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading teams...</p>}
+      {isError && <p className="text-sm text-red-500">Failed to load teams.</p>}
+      {!isLoading && !isError && teams.length === 0 && (
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">No teams found.</p>
+      )}
 
-      <Table
-        columns={PlayersListColumns}
-        data={(data?.players ?? []) as any}
-        isLoading={isLoading}
-        emptyMessage="No players found."
-      />
+      <div className="space-y-2">
+        {teams.map((team) => (
+          <div
+            key={team.Id}
+            className="flex items-center gap-3 rounded-lg border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 shadow-sm"
+          >
+            <div
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white bg-zinc-500"
+            >
+              {team.Name.charAt(0).toUpperCase()}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 truncate">{team.Name}</p>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {data && (
         <div className="flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400">
-          <span>{data.pagination.totalRecords} players</span>
+          <span>{data.pagination.totalRecords} teams</span>
           <div className="flex items-center gap-2">
             <button
               disabled={page <= 1}
@@ -60,8 +78,7 @@ export default function WidgetPlayers({ pageSize }: WidgetPlayersProps) {
 // Application Architecture || Define Typologies
 // =======================================================================================
 // =======================================================================================
-interface WidgetPlayersProps {
+interface WidgetTeamsProps {
   pageSize: number
-  search: string
   eventId: number
 }

@@ -7,6 +7,8 @@ import type { ExposureEvent } from "@/server/foreign-sdks/sdk-exposure-events/ex
 export const EventReadInputs = z.object({
   id: z.number()
     .describe("The unique identifier of the event in the database"),
+  includes: z.string().optional()
+    .describe("Additional data to include in the response, comma-separated"),
 })
 
 // Application Architecture || Define Outputs

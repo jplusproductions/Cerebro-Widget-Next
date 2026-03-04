@@ -56,7 +56,7 @@ Websites embed Cerebro widgets via a script tag and data-attribute-driven contai
 | 11| `transfer-history`   | Player/team transfer history       | No  |
 | 12| `tournament-bracket` | Knockout stage bracket view      | No  |
 
-**MVP scope**: `standings` and `fixtures` only.
+**MVP scope**: `standings` and `schedules` only.
 
 ---
 

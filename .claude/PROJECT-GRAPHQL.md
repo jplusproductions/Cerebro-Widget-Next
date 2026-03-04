@@ -34,7 +34,7 @@ Content-Type: application/json
 | name_local     | text    |                   |
 | year           | integer |                   |
 
-### fixtures
+### schedules
 | Column           | Type        | Notes                            |
 |------------------|-------------|----------------------------------|
 | id               | uuid        | PK                               |
@@ -52,7 +52,7 @@ Content-Type: application/json
 | Column          | Type    | Notes                    |
 |-----------------|---------|--------------------------|
 | id              | uuid    | PK                       |
-| fixture_id      | uuid    | FK → fixtures            |
+| fixture_id      | uuid    | FK → schedules            |
 | entity_id       | uuid    | nullable (unknown teams) |
 | name            | text    |                          |
 | code            | text    | nullable abbreviation    |
@@ -64,10 +64,10 @@ Content-Type: application/json
 
 ## Example Queries
 
-### Get fixtures with competitors
+### Get schedules with competitors
 ```graphql
-query GetFixtures($seasonId: uuid!, $limit: Int, $offset: Int) {
-  fixtures(
+query GetSchedules($seasonId: uuid!, $limit: Int, $offset: Int) {
+  schedules(
     where: { season_id: { _eq: $seasonId } }
     order_by: { start_time_utc: asc }
     limit: $limit

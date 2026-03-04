@@ -111,8 +111,9 @@ export class ExposureEventsApi {
 
   // Application Architecture || Events
   // =====================================================================================
-  async getEvent({ id }: { id: number }) {
+  async getEvent({ id, includes }: { id: number; includes?: string }) {
     const params: Record<string, unknown> = { id }
+    if (includes) params.includes = includes
     const { data } = await this.client.get("/api/v1/events", { params })
     return data.Event as ExposureEvent
   }
@@ -125,6 +126,12 @@ export class ExposureEventsApi {
 
   // Application Architecture || Divisions
   // =====================================================================================
+  async getDivision({ id }: { id: number }) {
+    const params: Record<string, unknown> = { id }
+    const { data } = await this.client.get("/api/v1/divisions", { params })
+    return data.Division as ExposureDivision
+  }
+
   async getDivisions(params?: ExposureDivisionsParams) {
     const { data } = await this.client.get("/api/v1/divisions", { params })
     return this.unwrapList<ExposureDivision>(data, "Divisions")
@@ -165,8 +172,9 @@ export class ExposureEventsApi {
 
   // Application Architecture || Games
   // =====================================================================================
-  async getGame({ id }: { id: number }) {
+  async getGame({ id, includes }: { id: number; includes?: string }) {
     const params: Record<string, unknown> = { id }
+    if (includes) params.includes = includes
     const { data } = await this.client.get("/api/v1/games", { params })
     return data.Game as ExposureGame
   }
@@ -184,6 +192,12 @@ export class ExposureEventsApi {
 
   // Application Architecture || Standings
   // =====================================================================================
+  async getStanding({ id }: { id: number }) {
+    const params: Record<string, unknown> = { id }
+    const { data } = await this.client.get("/api/v1/standings", { params })
+    return data.Standing as ExposureStanding
+  }
+
   async getStandings(params: ExposureStandingsParams) {
     const { data } = await this.client.get("/api/v1/standings", { params })
     return this.unwrapList<ExposureStanding>(data, "Standings")
@@ -196,6 +210,12 @@ export class ExposureEventsApi {
 
   // Application Architecture || Players
   // =====================================================================================
+  async getPlayer({ id }: { id: number }) {
+    const params: Record<string, unknown> = { id }
+    const { data } = await this.client.get("/api/v1/players", { params })
+    return data.Player as ExposurePlayer
+  }
+
   async getPlayers(params?: ExposurePlayersParams) {
     const { data } = await this.client.get("/api/v1/players", { params })
     return this.unwrapList<ExposurePlayer>(data, "Players")
@@ -210,6 +230,12 @@ export class ExposureEventsApi {
 
   // Application Architecture || Venues
   // =====================================================================================
+  async getVenue({ id }: { id: number }) {
+    const params: Record<string, unknown> = { id }
+    const { data } = await this.client.get("/api/v1/venues", { params })
+    return data.Venue as ExposureVenue
+  }
+
   async getVenues(params?: ExposureVenuesParams) {
     const { data } = await this.client.get("/api/v1/venues", { params })
     return this.unwrapList<ExposureVenue>(data, "Venues")

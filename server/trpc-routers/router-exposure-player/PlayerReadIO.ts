@@ -1,23 +1,21 @@
 import { z } from "zod"
-import { ExposureGameSchema } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
+import type { ExposurePlayer } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
 
 // Application Architecture || Define Inputs
 // =======================================================================================
 // =======================================================================================
-export const GameReadInputs = z.object({
+export const PlayerReadInputs = z.object({
   id: z.number()
-    .describe("The unique identifier of the game in the database"),
-  includes: z.string().optional()
-    .describe("Additional data to include in the response, comma-separated"),
+    .describe("The unique identifier of the player in the database"),
 })
 
 // Application Architecture || Define Outputs
 // =======================================================================================
 // =======================================================================================
-export const GameReadOutputs = ExposureGameSchema
+export const PlayerReadOutputs = z.custom<ExposurePlayer>()
 
 // Application Architecture || Define Typologies
 // =======================================================================================
 // =======================================================================================
-export type TGameReadInputs = z.TypeOf<typeof GameReadInputs>
-export type TGameReadOutputs = z.TypeOf<typeof GameReadOutputs>
+export type TPlayerReadInputs = z.TypeOf<typeof PlayerReadInputs>
+export type TPlayerReadOutputs = z.TypeOf<typeof PlayerReadOutputs>
