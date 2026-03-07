@@ -13,9 +13,9 @@ export const EventRead = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/event/read",
+      path: "/exposure/event/read",
       summary: "EventRead() -> Returns a single event by ID.",
-      tags: ["Event"],
+      tags: ["Events"],
     },
   })
   .input(EventReadInputs)

@@ -13,9 +13,9 @@ export const VenueRead = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/venue/read",
+      path: "/exposure/exposure/venue/read",
       summary: "VenueRead() -> Returns a single venue by ID.",
-      tags: ["Venue"],
+      tags: ["Venues"],
     },
   })
   .input(VenueReadInputs)

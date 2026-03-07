@@ -62,6 +62,31 @@ Content-Type: application/json
 | color_primary   | text    | hex without #            |
 | color_secondary | text    | hex without #            |
 
+### player
+| Column        | Type                   | Notes                      |
+|---------------|------------------------|----------------------------|
+| id            | uuid                   | PK                         |
+| name          | character varying      |                            |
+| date_of_birth | date                   | nullable                   |
+| position      | character varying      | nullable, e.g. "G"         |
+| height_inches | integer                | nullable                   |
+| weight_lb     | integer                | nullable                   |
+| hometown      | character varying      | nullable                   |
+| phone         | character varying      | nullable                   |
+| grad_year     | integer                | nullable                   |
+| alias         | array                  | nullable                   |
+| highschool    | character varying      | nullable                   |
+| nationality   | text                   | nullable                   |
+| state         | text                   | nullable                   |
+| created_date  | timestamptz            |                            |
+| modified_date | timestamptz            |                            |
+
+**Relationships:**
+- `biodata` via `player_id`
+- `player_event` via `player_id`
+- `player_game` via `player_id`
+- `player_team` via `player_id` (nested `team` for team details)
+
 ## Example Queries
 
 ### Get schedules with competitors
@@ -106,6 +131,32 @@ query GetSeasons($competitionId: uuid!) {
     name_local
     year
     competition { name }
+  }
+}
+```
+
+### Get players with team info
+```graphql
+query GetPlayers($limit: Int, $offset: Int) {
+  player(limit: $limit, offset: $offset, order_by: { name: asc }) {
+    id
+    name
+    date_of_birth
+    position
+    height_inches
+    weight_lb
+    nationality
+    hometown
+    player_team {
+      team {
+        name
+      }
+    }
+  }
+  player_aggregate {
+    aggregate {
+      count
+    }
   }
 }
 ```

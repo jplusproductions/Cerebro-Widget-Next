@@ -1,24 +1,19 @@
-import Image from "next/image"
 import type { ColumnDef } from "@tanstack/react-table"
-import type { TPlayersListItem } from "@/server/trpc-routers/router-graphql-players/PlayersListIO"
+import type { TPlayerReadOutputs } from "@/server/trpc-routers/router-cerebro-player/PlayerReadIO"
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const PlayersListColumns: ColumnDef<TPlayersListItem>[] = [
+export const PlayersListColumns: ColumnDef<TPlayerReadOutputs>[] = [
   {
     accessorKey: "name",
     header: "Player",
     cell: ({ row: { original } }) => (
       <div className="flex items-center gap-3">
-        <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-          {original.imageURL ? (
-            <Image src={original.imageURL} alt={original.name} fill className="object-cover" sizes="32px" />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              {original.name.charAt(0)}
-            </div>
-          )}
+        <div className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            {original.name.charAt(0)}
+          </span>
         </div>
         <span className="font-medium text-zinc-900 dark:text-zinc-100">{original.name}</span>
       </div>
@@ -28,14 +23,14 @@ export const PlayersListColumns: ColumnDef<TPlayersListItem>[] = [
     accessorKey: "teamName",
     header: "Team",
     cell: ({ row: { original } }) => (
-      <div className="flex items-center gap-2">
-        {original.teamImageURL && (
-          <div className="relative h-5 w-5 shrink-0">
-            <Image src={original.teamImageURL} alt={original.teamName} fill className="object-contain" sizes="20px" />
-          </div>
-        )}
-        <span className="text-zinc-600 dark:text-zinc-400">{original.teamName}</span>
-      </div>
+      <span className="text-zinc-600 dark:text-zinc-400">{original.teamName ?? "\u2014"}</span>
+    ),
+  },
+  {
+    accessorKey: "position",
+    header: "Pos",
+    cell: ({ row: { original } }) => (
+      <span className="text-zinc-600 dark:text-zinc-400">{original.position ?? "\u2014"}</span>
     ),
   },
   {
@@ -46,35 +41,26 @@ export const PlayersListColumns: ColumnDef<TPlayersListItem>[] = [
     ),
   },
   {
-    accessorKey: "age",
-    header: "Age",
-    meta: { align: "right" },
+    accessorKey: "hometown",
+    header: "Hometown",
     cell: ({ row: { original } }) => (
-      <span className="text-zinc-600 dark:text-zinc-400">{original.age ?? "\u2014"}</span>
+      <span className="text-zinc-600 dark:text-zinc-400">{original.hometown ?? "\u2014"}</span>
     ),
   },
   {
-    accessorKey: "height",
+    accessorKey: "heightInches",
     header: "Height",
-    meta: { align: "right" },
+    meta: { align: "center" },
     cell: ({ row: { original } }) => (
-      <span className="text-zinc-600 dark:text-zinc-400">{original.height ? `${original.height} cm` : "\u2014"}</span>
+      <span className="text-zinc-600 dark:text-zinc-400">{original.heightInches ? `${original.heightInches}"` : "\u2014"}</span>
     ),
   },
   {
-    accessorKey: "weight",
+    accessorKey: "weightLb",
     header: "Weight",
-    meta: { align: "right" },
+    meta: { align: "center" },
     cell: ({ row: { original } }) => (
-      <span className="text-zinc-600 dark:text-zinc-400">{original.weight ? `${original.weight} kg` : "\u2014"}</span>
-    ),
-  },
-  {
-    accessorKey: "bib",
-    header: "No.",
-    meta: { align: "right" },
-    cell: ({ row: { original } }) => (
-      <span className="font-mono text-zinc-600 dark:text-zinc-400">{original.bib ?? "\u2014"}</span>
+      <span className="text-zinc-600 dark:text-zinc-400">{original.weightLb ? `${original.weightLb} lbs` : "\u2014"}</span>
     ),
   },
 ]

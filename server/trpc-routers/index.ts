@@ -4,24 +4,24 @@ import { router } from "@/server/trpc"
 // =======================================================================================
 // =======================================================================================
 // import { RouterAuth } from "./router-auth/@index"
-// import { RouterExposureDivision } from "@/server/trpc-routers/router-exposure-division/@index"
-// import { RouterExposureDivisions } from "@/server/trpc-routers/router-exposure-divisions/@index"
-import { RouterExposureEvent } from "@/server/trpc-routers/router-exposure-event/@index"
-import { RouterExposureEvents } from "@/server/trpc-routers/router-exposure-events/@index"
-import { RouterExposureGame } from "@/server/trpc-routers/router-exposure-game/@index"
-import { RouterExposureGames } from "@/server/trpc-routers/router-exposure-games/@index"
-import { RouterExposurePlayer } from "@/server/trpc-routers/router-exposure-player/@index"
-import { RouterExposurePlayers } from "@/server/trpc-routers/router-exposure-players/@index"
-import { RouterExposureStanding } from "@/server/trpc-routers/router-exposure-standing/@index"
-import { RouterExposureStandings } from "@/server/trpc-routers/router-exposure-standings/@index"
-// import { RouterExposureStatistic } from "@/server/trpc-routers/router-exposure-statistic/@index"
-import { RouterExposureStatistics } from "@/server/trpc-routers/router-exposure-statistics/@index"
-import { RouterExposureTeam } from "@/server/trpc-routers/router-exposure-team/@index"
-import { RouterExposureTeams } from "@/server/trpc-routers/router-exposure-teams/@index"
-// import { RouterExposureVenue } from "@/server/trpc-routers/router-exposure-venue/@index"
-// import { RouterExposureVenues } from "@/server/trpc-routers/router-exposure-venues/@index"
-// import { GraphQLPlayers } from "./router-graphql-players/@index"
-// import { RouterProfile } from "./router-profile/@index"
+// import { RouterExposureDivision } from "./router-exposure-division/@index"
+// import { RouterExposureDivisions } from "./router-exposure-divisions/@index"
+import { RouterExposureEvent } from "./router-exposure-event/@index"
+import { RouterExposureEvents } from "./router-exposure-events/@index"
+import { RouterExposureGame } from "./router-exposure-game/@index"
+import { RouterExposureGames } from "./router-exposure-games/@index"
+// import { RouterExposurePlayer } from "./router-exposure-player/@index"
+// import { RouterExposurePlayers } from "./router-exposure-players/@index"
+import { RouterExposureStanding } from "./router-exposure-standing/@index"
+import { RouterExposureStandings } from "./router-exposure-standings/@index"
+// import { RouterExposureStatistic } from "./router-exposure-statistic/@index"
+import { RouterExposureStatistics } from "./router-exposure-statistics/@index"
+import { RouterExposureTeam } from "./router-exposure-team/@index"
+import { RouterExposureTeams } from "./router-exposure-teams/@index"
+import { RouterCerebroPlayers } from "@/server/trpc-routers/router-cerebro-players/@index"
+// import { RouterExposureVenue } from "./router-exposure-venue/@index"
+// import { RouterExposureVenues } from "./router-exposure-venues/@index"
+// import { GraphQLPlayers } from "./router-exposure-venues/@index"
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -34,8 +34,8 @@ export const AppRouter = router({
   RouterExposureEvents,
   RouterExposureGame,
   RouterExposureGames,
-  RouterExposurePlayer,
-  RouterExposurePlayers,
+  // RouterExposurePlayer,
+  // RouterExposurePlayers,
   RouterExposureStanding,
   RouterExposureStandings,
   RouterExposureStatistics,
@@ -43,7 +43,7 @@ export const AppRouter = router({
   RouterExposureTeams,
   // RouterExposureVenue,
   // RouterExposureVenues,
-  // GraphQLPlayers,
+  RouterCerebroPlayers
   // RouterProfile,
 })
 

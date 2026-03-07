@@ -13,7 +13,7 @@ export const VenuesList = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/venues/list",
+      path: "/exposure/venues/list",
       summary: "VenuesList() -> Returns a list of venues.",
       tags: ["Venues"],
     },

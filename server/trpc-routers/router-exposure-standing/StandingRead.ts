@@ -13,9 +13,9 @@ export const StandingRead = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/standing/read",
+      path: "/exposure/standing/read",
       summary: "StandingRead() -> Returns a single standing by ID.",
-      tags: ["Standing"],
+      tags: ["Standings"],
     },
   })
   .input(StandingReadInputs)

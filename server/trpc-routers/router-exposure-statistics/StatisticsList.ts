@@ -13,7 +13,7 @@ export const StatisticsList = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/statistics/list",
+      path: "/exposure/statistics/list",
       summary: "StatisticsList() -> Returns a list of statistics.",
       tags: ["Statistics"],
     },

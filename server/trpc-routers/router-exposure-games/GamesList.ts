@@ -13,7 +13,7 @@ export const GamesList = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/games/list",
+      path: "/exposure/games/list",
       summary: "GamesList() -> Returns a list of games.",
       tags: ["Games"],
     },

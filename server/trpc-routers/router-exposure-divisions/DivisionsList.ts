@@ -13,7 +13,7 @@ export const DivisionsList = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/divisions/list",
+      path: "/exposure/divisions/list",
       summary: "DivisionsList() -> Returns a list of divisions.",
       tags: ["Divisions"],
     },

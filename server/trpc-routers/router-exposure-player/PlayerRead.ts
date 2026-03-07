@@ -13,9 +13,9 @@ export const PlayerRead = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/player/read",
+      path: "/exposure/player/read",
       summary: "PlayerRead() -> Returns a single player by ID.",
-      tags: ["Player"],
+      tags: ["Players"],
     },
   })
   .input(PlayerReadInputs)

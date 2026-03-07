@@ -13,9 +13,9 @@ export const TeamRead = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/team/read",
+      path: "/exposure/team/read",
       summary: "TeamRead() -> Returns a single event by ID.",
-      tags: ["Team"],
+      tags: ["Teams"],
     },
   })
   .input(TeamReadInputs)

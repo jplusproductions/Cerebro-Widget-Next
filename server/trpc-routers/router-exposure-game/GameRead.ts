@@ -14,9 +14,9 @@ export const GameRead = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/game/read",
+      path: "/exposure/game/read",
       summary: "GameRead() -> Returns a single game by ID.",
-      tags: ["Game"],
+      tags: ["Games"],
     },
   })
   .input(GameReadInputs)

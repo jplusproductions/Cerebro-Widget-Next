@@ -14,7 +14,7 @@ export const EventsList = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/events/list",
+      path: "/exposure/events/list",
       summary: "EventsList() -> Returns a list of all events.",
       tags: ["Events"],
     },

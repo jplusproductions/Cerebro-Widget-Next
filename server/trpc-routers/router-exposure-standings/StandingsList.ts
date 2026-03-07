@@ -13,7 +13,7 @@ export const StandingsList = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/standings/list",
+      path: "/exposure/standings/list",
       summary: "StandingsList() -> Returns a list of standings.",
       tags: ["Standings"],
     },

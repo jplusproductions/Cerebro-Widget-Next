@@ -13,7 +13,7 @@ export const TeamsList = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/teams/list",
+      path: "/exposure/teams/list",
       summary: "TeamsList() -> Returns a list of all teams.",
       tags: ["Teams"],
     },
