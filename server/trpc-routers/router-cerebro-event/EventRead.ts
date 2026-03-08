@@ -3,7 +3,7 @@
 // =======================================================================================
 import { whiteListProcedure } from "@/server/trpc"
 import { CerebroGraphqlApi } from "@/server/foreign-sdks/sdk-cerebro-graphql/cerebro-graphql-api"
-import { GraphQLPlayer, PlayerReadInputs, PlayerReadOutputs } from "./PlayerReadIO"
+import { GraphQLEvent, EventReadInputs, EventReadOutputs } from "./EventReadIO"
 
 // Application Architecture || Define Client
 // =======================================================================================
@@ -13,60 +13,58 @@ const graphql = new CerebroGraphqlApi()
 // Application Architecture || Define Typologies
 // =======================================================================================
 // =======================================================================================
-interface GraphQLPlayerResponse {
-  player_by_pk: GraphQLPlayer | null
+interface GraphQLEventResponse {
+  event_by_pk: GraphQLEvent | null
 }
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const PlayerRead = whiteListProcedure
+export const EventRead = whiteListProcedure
   .meta({
     openapi: {
       method: "GET",
       protect: true,
-      path: "/cerebro/player/read",
-      summary: "PlayerRead() -> Returns a specific player.",
-      tags: ["Players"],
+      path: "/cerebro/event/read",
+      summary: "EventRead() -> Returns a specific event.",
+      tags: ["Events"],
     },
   })
-  .input(PlayerReadInputs)
-  .output(PlayerReadOutputs)
+  .input(EventReadInputs)
+  .output(EventReadOutputs)
   .query(async ({ input, ctx: { script } }) => {
-    await script.insight("Player Read query")
-    const data = await graphql.query<GraphQLPlayerResponse>(
-      `query GetPlayer($id: uuid!) {
-        player_by_pk(id: $id) {
+    await script.insight("Event Read query")
+    const data = await graphql.query<GraphQLEventResponse>(
+      `query GetEvent($id: uuid!) {
+        event_by_pk(id: $id) {
           id
           name
-          date_of_birth
-          position
-          height_inches
-          weight_lb
-          nationality
-          hometown
-          player_team {
-            team {
-              name
-            }
-          }
+          gender
+          level
+          location
+          region
+          start_date
+          end_date
+          created_date
+          modified_date
         }
       }`,
       { id: input.id },
     )
 
-    const p = data.player_by_pk
-    if (!p) throw new Error(`Player not found: ${input.id}`)
+    const e = data.event_by_pk
+    if (!e) throw new Error(`Event not found: ${input.id}`)
 
     return {
-      id: p.id,
-      name: p.name,
-      position: p.position,
-      nationality: p.nationality,
-      hometown: p.hometown,
-      dateOfBirth: p.date_of_birth,
-      heightInches: p.height_inches,
-      weightLb: p.weight_lb,
-      teamName: p.player_team[0]?.team.name ?? null,
+      id: e.id,
+      name: e.name,
+      gender: e.gender,
+      level: e.level,
+      location: e.location,
+      region: e.region,
+      startDate: e.start_date,
+      endDate: e.end_date,
+      createdDate: e.created_date,
+      modifiedDate: e.modified_date,
     }
   })

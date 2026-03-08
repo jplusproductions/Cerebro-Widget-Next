@@ -93,10 +93,10 @@ export default function Home() {
 
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href="/login"
+              href="/widget"
               className="glow-brand rounded-lg bg-[#fac421] px-6 py-3 text-sm font-semibold text-black transition-all hover:bg-[#ffe066]"
             >
-              Get Early Access
+             View Widget
             </Link>
             <a
               href="#how-it-works"

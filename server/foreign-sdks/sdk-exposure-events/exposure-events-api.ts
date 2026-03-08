@@ -1,32 +1,6 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios"
 import { createHmac } from "crypto"
-import {
-  throwExposureError,
-  type ExposureEventsPaginatedResponse,
-  type ExposureEventParams,
-  type ExposureEventsParams,
-  type ExposureDivisionsParams,
-  type ExposureTeamsParams,
-  type ExposureGameParams,
-  type ExposureGamesParams,
-  type ExposureUpdateGameParams,
-  type ExposureStandingsParams,
-  type ExposurePlayersParams,
-  type ExposureStatisticsParams,
-  type ExposureVenuesParams,
-  type ExposureEvent,
-  type ExposureDivision,
-  type ExposureTeam,
-  type ExposureGame,
-  type ExposureStanding,
-  type ExposurePlayer,
-  type ExposureStatistic,
-  type ExposureVenue,
-  type ExposureRegisterPayload,
-  type ExposureRegisterResponse,
-  type ExposurePaymentPayload,
-  type ExposurePaymentResponse,
-} from "./exposure-events-types"
+import { throwExposureError, type ExposureEventsPaginatedResponse, type ExposureEventParams, type ExposureEventsParams, type ExposureDivisionsParams, type ExposureTeamsParams, type ExposureGameParams, type ExposureGamesParams, type ExposureUpdateGameParams, type ExposureStandingsParams, type ExposurePlayersParams, type ExposureStatisticsParams, type ExposureVenuesParams, type ExposureEvent, type ExposureDivision, type ExposureTeam, type ExposureGame, type ExposureStanding, type ExposurePlayer, type ExposureStatistic, type ExposureVenue, type ExposureRegisterPayload, type ExposureRegisterResponse, type ExposurePaymentPayload, type ExposurePaymentResponse } from "./exposure-events-types"
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -50,7 +24,7 @@ export class ExposureEventsApi {
     this.client.interceptors.request.use(
       (config) => {
         this.signRequest(config)
-        const params = config.params ? "?" + new URLSearchParams(config.params).toString() : ""
+        const params = config.params ? `?${ new URLSearchParams(config.params).toString()}` : ""
         const headers = [`-H "Authentication: ${config.headers.get("Authentication")}"`, `-H "Timestamp: ${config.headers.get("Timestamp")}"`].join(" ")
         console.log(`[ExposureEventsApi] curl -X ${(config.method ?? "GET").toUpperCase()} "${config.baseURL}${config.url}${params}" ${headers}`)
         return config

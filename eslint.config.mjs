@@ -1,37 +1,62 @@
-import { defineConfig, globalIgnores } from "eslint/config"
-import nextVitals from "eslint-config-next/core-web-vitals"
 import nextTs from "eslint-config-next/typescript"
+import nextVitals from "eslint-config-next/core-web-vitals"
+import { defineConfig, globalIgnores, } from "eslint/config"
+import importNewlines from "eslint-plugin-import-newlines"
 
-// Application Architecture || Define Variables
+// Application Architecture || Define Configurations
 // =======================================================================================
 // =======================================================================================
-const eslintConfig = defineConfig([
+const eslintConfigNextjs = defineConfig([
   ...nextVitals,
   ...nextTs,
-  // Override default ignores of eslint-config-next.
   globalIgnores([
-    // Default ignores of eslint-config-next:
     "out/**",
     "dist/**",
     "build/**",
+    "outputs/**",
+    "load-test/**",
+    "node_modules/**",
+    "prisma/index.ts",
+    "prisma/zod/**",
+    "server/foreign-sdks/**/*-types.ts",
+    "**/*.min.js",
+    "**/chunks/**",
     "next-env.d.ts",
     ".next/**",
   ]),
   {
+    plugins: {
+      "import-newlines": importNewlines,
+    },
     rules: {
+      "no-var": ["error"],
+      "no-tabs": ["error"],
+      "prefer-template": ["error"],
+      "no-multi-spaces": ["error"],
+      "no-multiple-empty-lines": ["error", { max: 1 }],
+      "space-before-blocks": ["error"],
+      "object-curly-spacing": ["error", "always"],
+      "arrow-spacing": ["error", { before: true, after: true }],
+      "keyword-spacing": ["error", { before: true, after: true }],
       "quotes": ["error", "double"],
       "semi": ["error", "never"],
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
-      ],
-      "@typescript-eslint/no-explicit-any": "warn",
-      "no-multiple-empty-lines": ["error", { max: 1, maxBOF: 0, maxEOF: 0 }],
-    },
-  },
+      "indent": ["error", 2, { SwitchCase: 1 }],
+      "react/display-name": ["off"],
+      // NOTE: Support for useEffect [] (could fix, uglier code)
+      "react-hooks/exhaustive-deps": ["off"],
+      // NOTE: Support for setState in useEffect [] (could fix, may break code)
+      "react-hooks/set-state-in-effect": ["off"],
+      // NOTE: Support for React-Hook-Form (could fix, uglier code)
+      "react-hooks/incompatible-library": ["off"],
+      "@typescript-eslint/ban-ts-comment": ["off"],
+      "@typescript-eslint/no-require-imports": ["off"],
+      "@typescript-eslint/no-explicit-any": ["off"],
+      "import-newlines/enforce": ["error", { items: 999 }],
+    }
+  }
 ])
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export default eslintConfig
+export default eslintConfigNextjs

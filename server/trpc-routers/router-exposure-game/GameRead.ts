@@ -4,7 +4,7 @@
 import { whiteListProcedure } from "@/server/trpc"
 import { ExposureClient } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-api"
 import { GameReadInputs, GameReadOutputs } from "./GameReadIO"
-import {TRPCError} from "@trpc/server"
+import { TRPCError } from "@trpc/server"
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -29,7 +29,7 @@ export const GameRead = whiteListProcedure
       includes: input.includes,
     })
 
-    if(!response) {
+    if (!response) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Game could not be found"

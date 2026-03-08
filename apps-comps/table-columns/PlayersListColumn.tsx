@@ -19,6 +19,7 @@ export const PlayersListColumns: ColumnDef<TPlayerReadOutputs>[] = [
       </div>
     ),
   },
+
   {
     accessorKey: "teamName",
     header: "Team",

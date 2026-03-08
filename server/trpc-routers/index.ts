@@ -4,6 +4,10 @@ import { router } from "@/server/trpc"
 // =======================================================================================
 // =======================================================================================
 // import { RouterAuth } from "./router-auth/@index"
+import { RouterCerebroEvent } from "./router-cerebro-event/@index"
+import { RouterCerebroEvents } from "./router-cerebro-events/@index"
+import { RouterCerebroPlayer } from "./router-cerebro-player/@index"
+import { RouterCerebroPlayers } from "./router-cerebro-players/@index"
 // import { RouterExposureDivision } from "./router-exposure-division/@index"
 // import { RouterExposureDivisions } from "./router-exposure-divisions/@index"
 import { RouterExposureEvent } from "./router-exposure-event/@index"
@@ -18,7 +22,7 @@ import { RouterExposureStandings } from "./router-exposure-standings/@index"
 import { RouterExposureStatistics } from "./router-exposure-statistics/@index"
 import { RouterExposureTeam } from "./router-exposure-team/@index"
 import { RouterExposureTeams } from "./router-exposure-teams/@index"
-import { RouterCerebroPlayers } from "@/server/trpc-routers/router-cerebro-players/@index"
+
 // import { RouterExposureVenue } from "./router-exposure-venue/@index"
 // import { RouterExposureVenues } from "./router-exposure-venues/@index"
 // import { GraphQLPlayers } from "./router-exposure-venues/@index"
@@ -28,6 +32,10 @@ import { RouterCerebroPlayers } from "@/server/trpc-routers/router-cerebro-playe
 // =======================================================================================
 export const AppRouter = router({
   // RouterAuth,
+  RouterCerebroEvent,
+  RouterCerebroEvents,
+  RouterCerebroPlayer,
+  RouterCerebroPlayers,
   // RouterExposureDivision,
   // RouterExposureDivisions,
   RouterExposureEvent,
@@ -43,7 +51,7 @@ export const AppRouter = router({
   RouterExposureTeams,
   // RouterExposureVenue,
   // RouterExposureVenues,
-  RouterCerebroPlayers
+
   // RouterProfile,
 })
 

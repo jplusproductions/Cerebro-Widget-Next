@@ -4,7 +4,7 @@
 import { whiteListProcedure } from "@/server/trpc"
 import { ExposureClient } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-api"
 import { EventsListInputs, EventsListOutputs } from "./EventsListIO"
-import {TRPCError} from "@trpc/server"
+import { TRPCError } from "@trpc/server"
 
 // Application Architecture || Define Exports
 // =======================================================================================

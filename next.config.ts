@@ -1,5 +1,8 @@
 import type { NextConfig } from "next"
 
+// Application Architecture || Define Configurations
+// =======================================================================================
+// =======================================================================================
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -17,4 +20,7 @@ const nextConfig: NextConfig = {
   ],
 }
 
+// Application Architecture || Define Exports
+// =======================================================================================
+// =======================================================================================
 export default nextConfig

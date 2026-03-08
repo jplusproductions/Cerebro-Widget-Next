@@ -1,4 +1,10 @@
 import axios, { AxiosInstance } from "axios"
+import { scripts } from "chalk-scripts"
+
+// Application Architecture || Define Client
+// =======================================================================================
+// =======================================================================================
+const script = scripts({ id: "Cerebro", name: "CerebroAuthApi()" })
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -16,18 +22,19 @@ export class CerebroAuthApi {
   /** Login with email/password → returns JWT + refresh token */
   async login(email: string, password: string): Promise<CerebroAuthTokens> {
     const url = `/api/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
-    console.log(`[CerebroAuth] curl -X GET "${this.client.defaults.baseURL}${url}"`)
+    await script.insight(`Login request for ${email}`)
     const { data } = await this.client.get(url)
-    console.log("[CerebroAuth] login response:", JSON.stringify(data, null, 2))
+    await script.insight("Login successful")
     return data
   }
 
   /** Refresh an expired JWT using the refresh token */
   async refresh(refreshToken: string): Promise<CerebroAuthTokens> {
-    const url = `/api/refresh?refreshToken=${encodeURIComponent(refreshToken)}`
-    console.log(`[CerebroAuth] curl -X GET "${this.client.defaults.baseURL}${url}"`)
-    const { data } = await this.client.get(url)
-    console.log("[CerebroAuth] refresh response:", JSON.stringify(data, null, 2))
+    await script.insight("Refreshing token")
+    const { data } = await this.client.get(
+      `/api/refresh?refreshToken=${encodeURIComponent(refreshToken)}`,
+    )
+    await script.insight("Token refreshed successfully")
     return data
   }
 }

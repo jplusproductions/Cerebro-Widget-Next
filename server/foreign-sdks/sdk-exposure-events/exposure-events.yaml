@@ -1,0 +1,2307 @@
+openapi: "3.0.3"
+info:
+  title: Exposure Basketball API
+  version: "1.0.0"
+  description: |
+    Exposure Events Basketball REST API.
+    Null properties are removed from responses.
+    Image URLs support resizing via ?h={height}&w={width} query params.
+
+servers:
+  - url: https://basketball.exposureevents.com/api/v1
+
+security:
+  - exposureAuth: []
+
+# =====================================================================================
+# Security Schemes
+# =====================================================================================
+components:
+  securitySchemes:
+    exposureAuth:
+      type: apiKey
+      in: header
+      name: Authentication
+      description: |
+        HMAC-SHA256 signed header. Format: {ApiKey}.{Base64Signature}
+        Signature message (all uppercase, ampersand-separated):
+        {APIKEY}&{HTTPVERB}&{TIMESTAMP}&{RELATIVEURI}
+        A Timestamp header (ISO 8601) must also be sent with every request.
+
+  # ===================================================================================
+  # Parameters
+  # ===================================================================================
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+      description: Page number
+    PageSizeParam:
+      name: pagesize
+      in: query
+      schema:
+        type: integer
+        default: 50
+      description: Results per page
+
+  # ===================================================================================
+  # Schemas
+  # ===================================================================================
+  schemas:
+    # ---------------------------------------------------------------------------------
+    # Error
+    # ---------------------------------------------------------------------------------
+    Error:
+      type: object
+      properties:
+        Code:
+          type: integer
+          description: |
+            0=Other, 1=NotFound, 2=Invalid, 3=Required, 5=InvalidCredentials,
+            6=PermissionDenied, 7=Duplicate, 8=Maximum, 9=Minimum, 10=Inactive,
+            11=Range, 12=Unavailable, 13=SecureConnection, 14=Exists
+        Message:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        Errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Error"
+
+    # ---------------------------------------------------------------------------------
+    # Shared / Reusable
+    # ---------------------------------------------------------------------------------
+    Address:
+      type: object
+      properties:
+        Location:
+          type: string
+        StreetAddress:
+          type: string
+        ExtendedAddress:
+          type: string
+        City:
+          type: string
+        StateRegion:
+          type: string
+        PostalCode:
+          type: string
+        Country:
+          type: string
+        Latitude:
+          type: number
+          format: double
+        Longitude:
+          type: number
+          format: double
+
+    Organization:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        Website:
+          type: string
+
+    Season:
+      type: object
+      properties:
+        Id:
+          type: integer
+        StartYear:
+          type: integer
+        EndYear:
+          type: integer
+        Session:
+          type: string
+        Name:
+          type: string
+
+    Asset:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        Description:
+          type: string
+        Url:
+          type: string
+        DateModified:
+          type: string
+          format: date-time
+        DateCreated:
+          type: string
+          format: date-time
+
+    Report:
+      type: object
+      properties:
+        Name:
+          type: string
+        Description:
+          type: string
+        Url:
+          type: string
+        Type:
+          type: string
+          description: "ReportOutput enum: HTML, PDF"
+        DateModified:
+          type: string
+          format: date-time
+
+    Price:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Type:
+          type: integer
+          description: "PriceType enum: 1=EventFee, 2=Other, 3=CollegeCoach, 4=SanctionFee, 5=GateFee"
+        Name:
+          type: string
+        Amount:
+          type: number
+          format: double
+        Description:
+          type: string
+
+    Certification:
+      type: object
+      properties:
+        Type:
+          type: string
+          description: "EventCertification enum: AAU, IndiHoops, JrNBA, NationalSportsId, NCAACertified, NCAACertifiedPending, NTBA, USATournamentAlliance, USSSA"
+        Name:
+          type: string
+
+    MetaEntry:
+      type: object
+      properties:
+        Name:
+          type: string
+        Value:
+          type: string
+
+    # ---------------------------------------------------------------------------------
+    # Auth
+    # ---------------------------------------------------------------------------------
+    AuthRequest:
+      type: object
+      required: [Username, Password]
+      properties:
+        Username:
+          type: string
+          maxLength: 50
+          description: Event director account username
+        Password:
+          type: string
+          maxLength: 50
+          description: Event director account password
+
+    AuthResponse:
+      type: object
+      properties:
+        Id:
+          type: integer
+          description: User account identifier
+        ApiKey:
+          type: string
+          description: Base64-encoded API key (must be decoded before use)
+        ApiSecretKey:
+          type: string
+          description: Base64-encoded secret key (must be decoded before use)
+        Email:
+          type: string
+
+    # ---------------------------------------------------------------------------------
+    # Event
+    # ---------------------------------------------------------------------------------
+    EventSettings:
+      type: object
+      properties:
+        EnableRegistration:
+          type: boolean
+        RosterLimit:
+          type: integer
+        RegistrationStatus:
+          type: integer
+          description: "RegistrationStatus enum: 1=All, 2=Active, 3=ActiveAndPaid, 4=ActivePaidAndTravel"
+        RegistrationStartDate:
+          type: string
+        RegistrationEndDate:
+          type: string
+        RegistrationStartTime:
+          type: string
+        RegistrationEndTime:
+          type: string
+        ScheduleAvailabilityDate:
+          type: string
+        ScheduleAvailabilityTime:
+          type: string
+        ShowSchedule:
+          type: boolean
+        ShowPools:
+          type: boolean
+        ShowBrackets:
+          type: boolean
+        ShowTeams:
+          type: boolean
+
+    Event:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Sport:
+          type: integer
+        ParentId:
+          type: integer
+        Gender:
+          type: integer
+          description: "Gender enum: 0=MaleAndFemale, 1=Male, 2=Female, 4=AllGenders"
+        Name:
+          type: string
+        Organization:
+          $ref: "#/components/schemas/Organization"
+        Archive:
+          type: boolean
+        Type:
+          type: integer
+          description: "EventType enum: 0=Tournament, 1=League, 2=CampClinic, 3=Tryout, 4=Practice, 5=Training"
+        InviteType:
+          type: integer
+          description: "EventInviteType enum: 0=All, 3=Travel, 4=School, 9=InviteOnly, 10=JuniorVarsity, 11=Freshman, 12=HighSchool, 13=MiddleSchool, 14=ElementarySchool, 15=Varsity"
+        ParticipationType:
+          type: integer
+          description: "ParticipationType enum: 0=Team, 1=Individual"
+        Image:
+          type: string
+          description: Event image URL
+        StartDate:
+          type: string
+          description: M/D/YYYY format
+        EndDate:
+          type: string
+          description: M/D/YYYY format
+        TimeZone:
+          type: string
+        Address:
+          $ref: "#/components/schemas/Address"
+        ContactName:
+          type: string
+        ContactEmail:
+          type: string
+        ContactPhone:
+          type: string
+        InstagramHandle:
+          type: string
+        TwitterHandle:
+          type: string
+        Website:
+          type: string
+        FacebookPage:
+          type: string
+        TravelWebsite:
+          type: string
+        Settings:
+          $ref: "#/components/schemas/EventSettings"
+        Season:
+          $ref: "#/components/schemas/Season"
+        Divisions:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventDivisionSummary"
+        Assets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Asset"
+        Reports:
+          type: array
+          items:
+            $ref: "#/components/schemas/Report"
+        Venues:
+          type: array
+          items:
+            $ref: "#/components/schemas/Venue"
+        Prices:
+          type: array
+          items:
+            $ref: "#/components/schemas/Price"
+        Certifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/Certification"
+
+    EventDivisionSummary:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        Description:
+          type: string
+        Gender:
+          type: integer
+        Order:
+          type: integer
+
+    EventSingleResponse:
+      type: object
+      properties:
+        Event:
+          $ref: "#/components/schemas/Event"
+
+    EventListResponse:
+      type: object
+      properties:
+        Events:
+          type: object
+          properties:
+            Results:
+              type: array
+              items:
+                $ref: "#/components/schemas/Event"
+            Page:
+              type: integer
+            PageSize:
+              type: integer
+            Total:
+              type: integer
+
+    # ---------------------------------------------------------------------------------
+    # Division
+    # ---------------------------------------------------------------------------------
+    DivisionSettings:
+      type: object
+      properties:
+        EnableRegistration:
+          type: boolean
+        RosterLimit:
+          type: integer
+        RegistrationStatus:
+          type: integer
+          description: "RegistrationStatus enum"
+        ShowStandings:
+          type: boolean
+        ShowSchedule:
+          type: boolean
+        ShowBrackets:
+          type: boolean
+        ShowParticipants:
+          type: boolean
+
+    DivisionEventSummary:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        StartDate:
+          type: string
+        EndDate:
+          type: string
+
+    DivisionTeamSummary:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ExternalTeamId:
+          type: string
+        Name:
+          type: string
+        Gender:
+          type: integer
+        Paid:
+          type: boolean
+        Status:
+          type: integer
+        Address:
+          $ref: "#/components/schemas/Address"
+
+    Bracket:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        Results:
+          type: string
+        DateModified:
+          type: string
+          format: date-time
+
+    Division:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        Active:
+          type: boolean
+        Description:
+          type: string
+        Gender:
+          type: integer
+        Order:
+          type: integer
+        Event:
+          $ref: "#/components/schemas/DivisionEventSummary"
+        Settings:
+          $ref: "#/components/schemas/DivisionSettings"
+        Prices:
+          type: array
+          items:
+            $ref: "#/components/schemas/Price"
+        Teams:
+          type: array
+          items:
+            $ref: "#/components/schemas/DivisionTeamSummary"
+        Assets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Asset"
+        Reports:
+          type: array
+          items:
+            $ref: "#/components/schemas/Report"
+        Brackets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Bracket"
+
+    DivisionSingleResponse:
+      type: object
+      properties:
+        Division:
+          $ref: "#/components/schemas/Division"
+
+    DivisionListResponse:
+      type: object
+      properties:
+        Divisions:
+          type: object
+          properties:
+            Results:
+              type: array
+              items:
+                $ref: "#/components/schemas/Division"
+            Page:
+              type: integer
+            PageSize:
+              type: integer
+            Total:
+              type: integer
+
+    DivisionCreateRequest:
+      type: object
+      required: [eventid, name]
+      properties:
+        eventid:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        order:
+          type: integer
+        active:
+          type: boolean
+          default: true
+        externalid:
+          type: string
+
+    DivisionUpdateRequest:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        order:
+          type: integer
+        active:
+          type: boolean
+          default: true
+        externalid:
+          type: string
+
+    DivisionCreateResponse:
+      type: object
+      properties:
+        Id:
+          type: integer
+
+    # ---------------------------------------------------------------------------------
+    # Team
+    # ---------------------------------------------------------------------------------
+    Coach:
+      type: object
+      properties:
+        Id:
+          type: integer
+        CoachId:
+          type: integer
+        ParentId:
+          type: integer
+        Type:
+          type: integer
+          description: "CoachType enum: 0=Other, 1=HeadCoach, 2=AssistantCoach, 3=Administrator, 4=AdministratorHeadCoach, 5=AdministratorCoach, 6=BenchCoach, 7=Coach, 8=Manager, 9=ParentGuardian, 10=Player"
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        Email:
+          type: string
+        HomePhone:
+          type: string
+        MobilePhone:
+          type: string
+        FaxPhone:
+          type: string
+        WorkPhone:
+          type: string
+        Address:
+          $ref: "#/components/schemas/Address"
+
+    TeamPlayer:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ExternalPlayerId:
+          type: string
+        Number:
+          type: integer
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        Birthdate:
+          type: string
+          description: M/D/YYYY
+        BirthYear:
+          type: integer
+        Grade:
+          type: string
+        School:
+          type: string
+        GraduationYear:
+          type: integer
+        Height:
+          type: string
+        Weight:
+          type: integer
+        Position:
+          type: string
+        TravelTeam:
+          type: string
+        HomePhone:
+          type: string
+        MobilePhone:
+          type: string
+        Email:
+          type: string
+        ACTScore:
+          type: integer
+        SATScore:
+          type: integer
+        GPA:
+          type: number
+          format: double
+        Status:
+          type: integer
+          description: "RosterStatus enum: 0=Active, 1=Inactive, 2=Archived"
+        Address:
+          $ref: "#/components/schemas/Address"
+        Meta:
+          type: array
+          items:
+            $ref: "#/components/schemas/MetaEntry"
+
+    TeamPool:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        DivisionId:
+          type: integer
+
+    TeamDivisionSummary:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+
+    Team:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Sport:
+          type: integer
+        ParentId:
+          type: integer
+        Name:
+          type: string
+        Gender:
+          type: integer
+          description: "Gender enum"
+        Paid:
+          type: boolean
+        Status:
+          type: integer
+          description: "EventStatus enum: 0=None, 1=Active, 2=Inactive, 3=WaitingList"
+        Division:
+          $ref: "#/components/schemas/TeamDivisionSummary"
+        Address:
+          $ref: "#/components/schemas/Address"
+        Players:
+          type: array
+          items:
+            $ref: "#/components/schemas/TeamPlayer"
+        Coaches:
+          type: array
+          items:
+            $ref: "#/components/schemas/Coach"
+        Pools:
+          type: array
+          items:
+            $ref: "#/components/schemas/TeamPool"
+
+    TeamSingleResponse:
+      type: object
+      properties:
+        Team:
+          $ref: "#/components/schemas/Team"
+
+    TeamListResponse:
+      type: object
+      properties:
+        Teams:
+          type: object
+          properties:
+            Results:
+              type: array
+              items:
+                $ref: "#/components/schemas/Team"
+            Page:
+              type: integer
+            PageSize:
+              type: integer
+            Total:
+              type: integer
+
+    TeamCreatePlayerInput:
+      type: object
+      properties:
+        FirstName:
+          type: string
+          maxLength: 100
+        LastName:
+          type: string
+          maxLength: 100
+        Email:
+          type: string
+          maxLength: 100
+        Phone:
+          type: string
+          maxLength: 100
+        Number:
+          type: integer
+        Status:
+          type: integer
+
+    TeamCreateRequest:
+      type: object
+      required: [DivisionId, Name]
+      properties:
+        DivisionId:
+          type: integer
+        Name:
+          type: string
+        EventId:
+          type: integer
+        Gender:
+          type: integer
+          description: "Gender enum"
+        Paid:
+          type: boolean
+          default: true
+        Status:
+          type: integer
+          description: "EventStatus enum"
+        Age:
+          type: string
+          description: Age group
+        Grade:
+          type: string
+          description: Grade level
+        Address:
+          type: object
+          properties:
+            City:
+              type: string
+            StateRegion:
+              type: string
+            PostalCode:
+              type: string
+        ExternalTeamId:
+          type: string
+        Notes:
+          type: string
+        Website:
+          type: string
+          description: Must begin with http://
+        TwitterHandle:
+          type: string
+          description: Exclude @ symbol
+        Abbreviation:
+          type: string
+        InstagramHandle:
+          type: string
+        FacebookPage:
+          type: string
+        Players:
+          type: array
+          maxItems: 20
+          items:
+            $ref: "#/components/schemas/TeamCreatePlayerInput"
+
+    TeamUpdateRequest:
+      type: object
+      required: [Id]
+      properties:
+        Id:
+          type: integer
+          description: Team identifier (or use ExternalTeamId)
+        ExternalTeamId:
+          type: string
+          description: Alternative identifier
+        DivisionId:
+          type: integer
+        Name:
+          type: string
+        Gender:
+          type: integer
+        Paid:
+          type: boolean
+        Status:
+          type: integer
+        Age:
+          type: string
+        Grade:
+          type: string
+        Address:
+          type: object
+          properties:
+            City:
+              type: string
+            StateRegion:
+              type: string
+            PostalCode:
+              type: string
+        Notes:
+          type: string
+        Website:
+          type: string
+        TwitterHandle:
+          type: string
+        Abbreviation:
+          type: string
+        InstagramHandle:
+          type: string
+        FacebookPage:
+          type: string
+        Players:
+          type: array
+          maxItems: 20
+          items:
+            $ref: "#/components/schemas/TeamCreatePlayerInput"
+
+    TeamCreateResponse:
+      type: object
+      properties:
+        Id:
+          type: integer
+
+    # ---------------------------------------------------------------------------------
+    # Game
+    # ---------------------------------------------------------------------------------
+    GameDivision:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        Event:
+          type: object
+          properties:
+            Id:
+              type: integer
+            Name:
+              type: string
+
+    VenueCourt:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Court:
+          type: object
+          properties:
+            Id:
+              type: integer
+            Name:
+              type: string
+            Abbr:
+              type: string
+        Venue:
+          $ref: "#/components/schemas/Venue"
+
+    GameTeam:
+      type: object
+      properties:
+        Name:
+          type: string
+        Pool:
+          type: string
+        PoolNumber:
+          type: integer
+        Score:
+          type: integer
+        TeamId:
+          type: integer
+        TeamPoolId:
+          type: integer
+        BracketName:
+          type: string
+        BracketId:
+          type: integer
+        DivisionSeed:
+          type: integer
+        Seed:
+          type: integer
+        PoolSeed:
+          type: integer
+        DivisionId:
+          type: integer
+        DivisionName:
+          type: string
+        WonBy:
+          type: integer
+          description: "WonByType enum: 7=Forfeit"
+        Color:
+          type: string
+          description: Hex color code
+        Exhibition:
+          type: boolean
+
+    Game:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Type:
+          type: integer
+        Date:
+          type: string
+          description: m/d/yyyy format
+        Time:
+          type: string
+        Division:
+          $ref: "#/components/schemas/GameDivision"
+        VenueCourt:
+          $ref: "#/components/schemas/VenueCourt"
+        AwayTeam:
+          $ref: "#/components/schemas/GameTeam"
+        HomeTeam:
+          $ref: "#/components/schemas/GameTeam"
+        BracketName:
+          type: string
+        Round:
+          type: integer
+          description: "BracketRoundType enum: 0=None, 1=Championship, 2=Semifinal, 3=Quarterfinal"
+
+    GameSingleResponse:
+      type: object
+      properties:
+        Game:
+          $ref: "#/components/schemas/Game"
+
+    GameListResponse:
+      type: object
+      properties:
+        Games:
+          type: object
+          properties:
+            Results:
+              type: array
+              items:
+                $ref: "#/components/schemas/Game"
+            Page:
+              type: integer
+            PageSize:
+              type: integer
+            Total:
+              type: integer
+
+    GameUpdateRequest:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: integer
+        awayteamscore:
+          type: integer
+        hometeamscore:
+          type: integer
+        awayteamwonby:
+          type: integer
+          description: "WonByType enum"
+        hometeamwonby:
+          type: integer
+          description: "WonByType enum"
+        externalid:
+          type: string
+          description: External vendor game ID for statistics
+
+    # ---------------------------------------------------------------------------------
+    # Standings
+    # ---------------------------------------------------------------------------------
+    StandingsColumn:
+      type: object
+      properties:
+        Name:
+          type: string
+        Abbr:
+          type: string
+
+    StandingsParticipant:
+      type: object
+      properties:
+        Name:
+          type: string
+        Id:
+          type: integer
+        ParticipantId:
+          type: integer
+        Place:
+          type: integer
+        Number:
+          type: integer
+        ExternalId:
+          type: string
+        Columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/StandingsColumn"
+
+    StandingsGroup:
+      type: object
+      properties:
+        Name:
+          type: string
+        Id:
+          type: integer
+        List:
+          type: array
+          items:
+            type: object
+            properties:
+              Name:
+                type: string
+              Id:
+                type: integer
+              Participants:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StandingsParticipant"
+
+    StandingsResponse:
+      type: object
+      properties:
+        Groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/StandingsGroup"
+        Columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/StandingsColumn"
+
+    StandingsUpdateRequest:
+      type: object
+      required: [eventid]
+      properties:
+        eventid:
+          type: integer
+        teampoolid:
+          type: integer
+          description: Required to update with team ID
+        teamid:
+          type: integer
+          description: Team to assign to position
+
+    # ---------------------------------------------------------------------------------
+    # Player
+    # ---------------------------------------------------------------------------------
+    PlayerStatistic:
+      type: object
+      properties:
+        Started:
+          type: boolean
+        Minutes:
+          type: integer
+        Points:
+          type: integer
+        FieldGoalsMade:
+          type: integer
+        FieldGoalsAttempted:
+          type: integer
+        FieldGoalsPercent:
+          type: number
+          format: double
+        TwoPointersMade:
+          type: integer
+        TwoPointersAttempted:
+          type: integer
+        TwoPointersPercent:
+          type: number
+          format: double
+        ThreePointersMade:
+          type: integer
+        ThreePointersAttempted:
+          type: integer
+        ThreePointersPercent:
+          type: number
+          format: double
+        FreeThrowsMade:
+          type: integer
+        FreeThrowsAttempted:
+          type: integer
+        FreeThrowsPercent:
+          type: number
+          format: double
+        OffensiveRebounds:
+          type: integer
+        DefensiveRebounds:
+          type: integer
+        Rebounds:
+          type: integer
+        Assists:
+          type: integer
+        Steals:
+          type: integer
+        Deflections:
+          type: integer
+        Blocks:
+          type: integer
+        Turnovers:
+          type: integer
+        PersonalFouls:
+          type: integer
+        TechnicalFouls:
+          type: integer
+
+    PlayerGame:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Date:
+          type: string
+          description: M/D/YYYY
+        Time:
+          type: string
+        Venue:
+          type: string
+        Court:
+          type: string
+        Statistic:
+          $ref: "#/components/schemas/PlayerStatistic"
+
+    PlayerTeam:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ExternalTeamId:
+          type: string
+        Number:
+          type: integer
+        Name:
+          type: string
+        DivisionId:
+          type: integer
+        DivisionName:
+          type: string
+        ParentId:
+          type: integer
+        Games:
+          type: array
+          items:
+            $ref: "#/components/schemas/PlayerGame"
+
+    PlayerProfile:
+      type: object
+      properties:
+        Birthdate:
+          type: string
+          description: M/D/YYYY
+        BirthYear:
+          type: integer
+        Height:
+          type: string
+        Weight:
+          type: integer
+        School:
+          type: string
+        GraduationYear:
+          type: integer
+        Grade:
+          type: string
+        Position:
+          type: string
+        TravelTeam:
+          type: string
+        ACTScore:
+          type: integer
+        SATScore:
+          type: integer
+        GPA:
+          type: number
+          format: double
+
+    Player:
+      type: object
+      properties:
+        Id:
+          type: integer
+        ParentId:
+          type: integer
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        Profile:
+          $ref: "#/components/schemas/PlayerProfile"
+        Teams:
+          type: array
+          items:
+            $ref: "#/components/schemas/PlayerTeam"
+
+    PlayerSingleResponse:
+      type: object
+      properties:
+        Player:
+          $ref: "#/components/schemas/Player"
+
+    PlayerListResponse:
+      type: object
+      properties:
+        Players:
+          type: object
+          properties:
+            Results:
+              type: array
+              items:
+                $ref: "#/components/schemas/Player"
+            Page:
+              type: integer
+            PageSize:
+              type: integer
+            Total:
+              type: integer
+
+    # ---------------------------------------------------------------------------------
+    # Statistics
+    # ---------------------------------------------------------------------------------
+    StatisticParticipant:
+      type: object
+      properties:
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        Value:
+          type: number
+          format: double
+        PlayerId:
+          type: integer
+
+    StatisticLeader:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: "Category display name, e.g. 'Points Per Game'"
+        Participants:
+          type: array
+          items:
+            $ref: "#/components/schemas/StatisticParticipant"
+
+    StatisticsResponse:
+      type: object
+      properties:
+        Players:
+          type: object
+          properties:
+            Statistics:
+              type: array
+              items:
+                $ref: "#/components/schemas/StatisticLeader"
+
+    # ---------------------------------------------------------------------------------
+    # Venue
+    # ---------------------------------------------------------------------------------
+    VenueLocation:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        Abbr:
+          type: string
+
+    Venue:
+      type: object
+      properties:
+        Id:
+          type: integer
+        Name:
+          type: string
+        Abbr:
+          type: string
+        Address:
+          $ref: "#/components/schemas/Address"
+        Locations:
+          type: array
+          items:
+            $ref: "#/components/schemas/VenueLocation"
+
+    VenueSingleResponse:
+      type: object
+      properties:
+        Venue:
+          $ref: "#/components/schemas/Venue"
+
+    VenueListResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/Venue"
+
+    # ---------------------------------------------------------------------------------
+    # Registration
+    # ---------------------------------------------------------------------------------
+    RegisterCoachInput:
+      type: object
+      properties:
+        primarycontact:
+          type: boolean
+          default: false
+          description: One required per team
+        firstname:
+          type: string
+          maxLength: 100
+        lastname:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          maxLength: 100
+          format: email
+        type:
+          type: integer
+          description: "CoachType enum, default Other (0)"
+        ncaacoachesapprovalnumber:
+          type: string
+          maxLength: 100
+        mobilephone:
+          type: string
+          maxLength: 100
+        homephone:
+          type: string
+          maxLength: 100
+        workphone:
+          type: string
+          maxLength: 100
+        faxphone:
+          type: string
+          maxLength: 100
+        address:
+          type: object
+          properties:
+            city:
+              type: string
+              maxLength: 100
+            stateregion:
+              type: string
+              maxLength: 100
+            postalcode:
+              type: string
+              maxLength: 10
+        meta:
+          type: array
+          maxItems: 20
+          items:
+            $ref: "#/components/schemas/MetaEntry"
+
+    RegisterPlayerInput:
+      type: object
+      properties:
+        firstname:
+          type: string
+          maxLength: 100
+        lastname:
+          type: string
+          maxLength: 100
+        birthdate:
+          type: string
+          description: mm/dd/yyyy
+        homephone:
+          type: string
+          maxLength: 100
+        mobilephone:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          maxLength: 100
+        address:
+          type: object
+          properties:
+            city:
+              type: string
+              maxLength: 100
+            stateregion:
+              type: string
+              maxLength: 100
+            postalcode:
+              type: string
+              maxLength: 10
+        number:
+          type: integer
+        position:
+          type: string
+          maxLength: 100
+        school:
+          type: string
+          maxLength: 100
+        graduationyear:
+          type: integer
+        meta:
+          type: array
+          maxItems: 20
+          items:
+            $ref: "#/components/schemas/MetaEntry"
+
+    RegisterPaymentInput:
+      type: object
+      properties:
+        priceid:
+          type: integer
+          description: Required if no amount
+        amount:
+          type: number
+          format: double
+          description: Required if no priceid
+        title:
+          type: string
+          maxLength: 100
+          description: Required if no priceid
+        description:
+          type: string
+          description: Required if no priceid
+        firstname:
+          type: string
+          maxLength: 100
+        lastname:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          maxLength: 100
+          format: email
+        phone:
+          type: string
+          maxLength: 100
+        creditcardtype:
+          type: string
+          maxLength: 100
+          description: "Visa, Mastercard, Discover, American Express"
+        creditcardnumber:
+          type: string
+          maxLength: 100
+        creditcardexpireyear:
+          type: integer
+          description: 2-digit year
+        creditcardexpiremonth:
+          type: integer
+          description: 2-digit month
+        creditcardcvv2:
+          type: string
+          maxLength: 100
+        address:
+          type: object
+          description: Required when credit card is provided
+          properties:
+            streetaddress:
+              type: string
+              maxLength: 100
+            extendedaddress:
+              type: string
+              maxLength: 100
+            city:
+              type: string
+              maxLength: 100
+            stateregion:
+              type: string
+              maxLength: 100
+            postalcode:
+              type: string
+              maxLength: 10
+
+    RegisterRequest:
+      type: object
+      required: [eventid, divisionid, name, gender]
+      properties:
+        eventid:
+          type: integer
+        divisionid:
+          type: integer
+        name:
+          type: string
+          maxLength: 100
+          description: Team name
+        year:
+          type: integer
+          default: 2026
+          description: Participation year
+        gender:
+          type: integer
+          description: "Gender enum"
+        notes:
+          type: string
+        markaspaid:
+          type: boolean
+          default: true
+        enablecreditcard:
+          type: boolean
+          default: true
+        enablepaymentconfirmation:
+          type: boolean
+          default: true
+        address:
+          type: object
+          properties:
+            city:
+              type: string
+              maxLength: 100
+            stateregion:
+              type: string
+              maxLength: 100
+            postalcode:
+              type: string
+              maxLength: 10
+        meta:
+          type: array
+          maxItems: 20
+          items:
+            $ref: "#/components/schemas/MetaEntry"
+        coaches:
+          type: array
+          maxItems: 20
+          items:
+            $ref: "#/components/schemas/RegisterCoachInput"
+        players:
+          type: array
+          maxItems: 20
+          items:
+            $ref: "#/components/schemas/RegisterPlayerInput"
+        payment:
+          $ref: "#/components/schemas/RegisterPaymentInput"
+
+    RegisterResponse:
+      type: object
+      properties:
+        TeamId:
+          type: integer
+        Status:
+          type: integer
+
+    # ---------------------------------------------------------------------------------
+    # Payment
+    # ---------------------------------------------------------------------------------
+    PaymentObject:
+      type: object
+      properties:
+        PriceId:
+          type: integer
+          description: Required if no Amount
+        Amount:
+          type: number
+          format: double
+          description: Required if no PriceId
+        Title:
+          type: string
+          maxLength: 100
+          description: Required if no PriceId
+        Description:
+          type: string
+          description: Required if no PriceId
+        FirstName:
+          type: string
+          maxLength: 100
+        LastName:
+          type: string
+          maxLength: 100
+        Email:
+          type: string
+          maxLength: 100
+          format: email
+        Phone:
+          type: string
+          maxLength: 100
+        Organization:
+          type: string
+        CreditCardType:
+          type: string
+          maxLength: 100
+          description: "Visa, Mastercard, Discover, American Express"
+        CreditCardNumber:
+          type: string
+          maxLength: 100
+        CreditCardExpireYear:
+          type: integer
+          description: 2-digit year
+        CreditCardExpireMonth:
+          type: integer
+          description: 2-digit month
+        CreditCardCvv2:
+          type: string
+          maxLength: 100
+        Redeemed:
+          type: boolean
+        Address:
+          type: object
+          description: Required when credit card is provided
+          properties:
+            StreetAddress:
+              type: string
+              maxLength: 100
+            ExtendedAddress:
+              type: string
+              maxLength: 100
+            City:
+              type: string
+              maxLength: 100
+            StateRegion:
+              type: string
+              maxLength: 100
+            PostalCode:
+              type: string
+              maxLength: 10
+
+    PaymentRequest:
+      type: object
+      properties:
+        teamid:
+          type: integer
+          description: Required if no divisionid/eventid
+        divisionid:
+          type: integer
+          description: Required if no teamid/eventid
+        eventid:
+          type: integer
+          description: Required if no teamid/divisionid
+        markaspaid:
+          type: boolean
+          default: true
+          description: Only used with teamid
+        enablecreditcard:
+          type: boolean
+          default: true
+          description: Creates payment and charges card
+        enablepaymentconfirmation:
+          type: boolean
+          default: true
+          description: Sends confirmation email
+        CollegeCoachId:
+          type: integer
+        Payment:
+          $ref: "#/components/schemas/PaymentObject"
+
+    PaymentResponse:
+      type: object
+      properties:
+        TransactionId:
+          type: string
+
+# =====================================================================================
+# Paths
+# =====================================================================================
+paths:
+  # -----------------------------------------------------------------------------------
+  # Authenticate
+  # -----------------------------------------------------------------------------------
+  /authenticate:
+    post:
+      operationId: authenticate
+      summary: Authenticate and obtain API keys
+      tags: [Authentication]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequest"
+      responses:
+        "200":
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -----------------------------------------------------------------------------------
+  # Events
+  # -----------------------------------------------------------------------------------
+  /events:
+    get:
+      operationId: getEvents
+      summary: Get a single event (by id) or list events (paginated)
+      tags: [Events]
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          description: Event identifier. When provided, returns a single Event object instead of paginated list.
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
+        - name: parentid
+          in: query
+          schema:
+            type: integer
+          description: Filter by parent event
+        - name: organizationid
+          in: query
+          schema:
+            type: integer
+          description: Filter by organization
+        - name: archive
+          in: query
+          schema:
+            type: boolean
+          description: Include archived events
+        - name: startdate
+          in: query
+          schema:
+            type: string
+          description: Filter at and above date (M/D/YYYY)
+        - name: enddate
+          in: query
+          schema:
+            type: string
+          description: Filter at and below date (M/D/YYYY)
+        - name: type
+          in: query
+          schema:
+            type: integer
+          description: "EventType enum filter"
+        - name: includes
+          in: query
+          schema:
+            type: string
+          description: "Comma-separated EventIncludes: Assets, Divisions, Venues, Organizations, Prices, Reports, Settings, Season, AgeGrades"
+      responses:
+        "200":
+          description: Single event or paginated list
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/EventSingleResponse"
+                  - $ref: "#/components/schemas/EventListResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -----------------------------------------------------------------------------------
+  # Divisions
+  # -----------------------------------------------------------------------------------
+  /divisions:
+    get:
+      operationId: getDivisions
+      summary: Get a single division (by id) or list divisions (paginated)
+      tags: [Divisions]
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          description: Division identifier. When provided, returns a single Division object.
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
+        - name: eventid
+          in: query
+          schema:
+            type: integer
+          description: Filter by event
+        - name: includes
+          in: query
+          schema:
+            type: string
+          description: "Comma-separated DivisionIncludes: Assets, Brackets, Prices, Reports, Results, Settings, Teams"
+      responses:
+        "200":
+          description: Single division or paginated list
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/DivisionSingleResponse"
+                  - $ref: "#/components/schemas/DivisionListResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    post:
+      operationId: createDivision
+      summary: Create a new division
+      tags: [Divisions]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DivisionCreateRequest"
+      responses:
+        "200":
+          description: Division created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DivisionCreateResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    put:
+      operationId: updateDivision
+      summary: Update an existing division (partial update)
+      tags: [Divisions]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DivisionUpdateRequest"
+      responses:
+        "200":
+          description: Division updated
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -----------------------------------------------------------------------------------
+  # Teams
+  # -----------------------------------------------------------------------------------
+  /teams:
+    get:
+      operationId: getTeams
+      summary: Get a single team (by id) or list teams (paginated)
+      tags: [Teams]
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          description: Team identifier. When provided, returns a single Team object.
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
+        - name: EventId
+          in: query
+          schema:
+            type: integer
+          description: Filter by event (required if DivisionId absent)
+        - name: DivisionId
+          in: query
+          schema:
+            type: integer
+          description: Filter by division (required if EventId absent)
+        - name: TeamIds
+          in: query
+          schema:
+            type: string
+          description: Comma-separated team identifiers
+        - name: Status
+          in: query
+          schema:
+            type: integer
+          description: "EventStatus enum filter"
+        - name: Paid
+          in: query
+          schema:
+            type: boolean
+          description: Payment status filter
+        - name: includes
+          in: query
+          schema:
+            type: string
+          description: "Comma-separated TeamIncludes: Players, Coaches, Pools"
+      responses:
+        "200":
+          description: Single team or paginated list
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/TeamSingleResponse"
+                  - $ref: "#/components/schemas/TeamListResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    post:
+      operationId: createTeam
+      summary: Create a new team
+      tags: [Teams]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeamCreateRequest"
+      responses:
+        "200":
+          description: Team created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamCreateResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    put:
+      operationId: updateTeam
+      summary: Update an existing team (partial update)
+      tags: [Teams]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeamUpdateRequest"
+      responses:
+        "200":
+          description: Team updated
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -----------------------------------------------------------------------------------
+  # Games
+  # -----------------------------------------------------------------------------------
+  /games:
+    get:
+      operationId: getGames
+      summary: Get a single game (by id) or list games (paginated)
+      tags: [Games]
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          description: Game identifier. When provided, returns a single Game object.
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
+        - name: eventid
+          in: query
+          schema:
+            type: integer
+          description: Filter by event
+        - name: divisionid
+          in: query
+          schema:
+            type: integer
+          description: Filter by division
+        - name: teamid
+          in: query
+          schema:
+            type: integer
+          description: Filter by team
+        - name: date
+          in: query
+          schema:
+            type: string
+          description: Filter by date (m/d/yyyy)
+        - name: includes
+          in: query
+          schema:
+            type: string
+          description: "Comma-separated GameIncludes: Season"
+      responses:
+        "200":
+          description: Single game or paginated list
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/GameSingleResponse"
+                  - $ref: "#/components/schemas/GameListResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    put:
+      operationId: updateGame
+      summary: Update game scores and metadata
+      tags: [Games]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameUpdateRequest"
+      responses:
+        "200":
+          description: Game updated
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -----------------------------------------------------------------------------------
+  # Standings
+  # -----------------------------------------------------------------------------------
+  /standings:
+    get:
+      operationId: getStandings
+      summary: Get standings for an event
+      tags: [Standings]
+      parameters:
+        - name: eventid
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Event identifier
+        - name: divisionid
+          in: query
+          schema:
+            type: integer
+          description: Filter by division
+        - name: bracketid
+          in: query
+          schema:
+            type: integer
+          description: Bracket filter (only with display=Bracket)
+        - name: display
+          in: query
+          schema:
+            type: string
+            default: Pool
+          description: "StandingsDisplay enum: Pool, Division, Event, Bracket"
+      responses:
+        "200":
+          description: Standings data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StandingsResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    put:
+      operationId: updateStandings
+      summary: Update standings for an event
+      tags: [Standings]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StandingsUpdateRequest"
+      responses:
+        "200":
+          description: Standings updated
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -----------------------------------------------------------------------------------
+  # Players
+  # -----------------------------------------------------------------------------------
+  /players:
+    get:
+      operationId: getPlayers
+      summary: Get a single player (by id) or list players (paginated)
+      tags: [Players]
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+          description: Player identifier. When provided, returns a single Player object.
+        - $ref: "#/components/parameters/PageParam"
+        - $ref: "#/components/parameters/PageSizeParam"
+        - name: eventid
+          in: query
+          schema:
+            type: integer
+          description: Filter by event
+        - name: divisionid
+          in: query
+          schema:
+            type: integer
+          description: Filter by division
+        - name: playerids
+          in: query
+          schema:
+            type: string
+          description: Comma-separated player IDs
+        - name: teamids
+          in: query
+          schema:
+            type: string
+          description: Comma-separated team IDs
+        - name: includes
+          in: query
+          schema:
+            type: string
+          description: "Comma-separated PlayerIncludes: Profile, Teams, Statistics"
+      responses:
+        "200":
+          description: Single player or paginated list
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/PlayerSingleResponse"
+                  - $ref: "#/components/schemas/PlayerListResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -----------------------------------------------------------------------------------
+  # Statistics
+  # -----------------------------------------------------------------------------------
+  /statistics:
+    get:
+      operationId: getStatistics
+      summary: Get statistical leaders
+      tags: [Statistics]
+      parameters:
+        - name: eventid
+          in: query
+          schema:
+            type: integer
+          description: Event identifier
+        - name: divisionid
+          in: query
+          schema:
+            type: integer
+          description: Division identifier
+        - name: categories
+          in: query
+          schema:
+            type: string
+          description: |
+            Comma-separated StatisticCategory values:
+            pts, ppg, fgm, fg%, 2pm, 3pm, 3fg%, ftm, ft%,
+            reb, rpg, dreb, oreb, ast, apg, stl, spg, blk, bpg, to, tpg
+        - name: pagesize
+          in: query
+          schema:
+            type: integer
+            default: 10
+          description: Number of leaders per category
+      responses:
+        "200":
+          description: Statistical leaders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatisticsResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -----------------------------------------------------------------------------------
+  # Venues
+  # -----------------------------------------------------------------------------------
+  /venues:
+    get:
+      operationId: getVenues
+      summary: Get a single venue (by Id) or list venues
+      tags: [Venues]
+      parameters:
+        - name: Id
+          in: query
+          schema:
+            type: integer
+          description: Venue identifier. When provided, returns a single Venue object.
+        - name: EventId
+          in: query
+          schema:
+            type: integer
+          description: Filter by event
+      responses:
+        "200":
+          description: Single venue or list of venues
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/VenueSingleResponse"
+                  - $ref: "#/components/schemas/VenueListResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -----------------------------------------------------------------------------------
+  # Register
+  # -----------------------------------------------------------------------------------
+  /register:
+    post:
+      operationId: register
+      summary: Register a team for an event
+      tags: [Registration]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "200":
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # -----------------------------------------------------------------------------------
+  # Payments
+  # -----------------------------------------------------------------------------------
+  /payments:
+    post:
+      operationId: createPayment
+      summary: Create a payment
+      tags: [Payments]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentRequest"
+      responses:
+        "200":
+          description: Payment processed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"

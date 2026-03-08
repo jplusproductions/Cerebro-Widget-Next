@@ -3,11 +3,11 @@ import { router } from "@/server/trpc"
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { PlayerRead } from "./PlayerRead"
+import { EventRead } from "./EventRead"
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const RouterCerebroPlayer = router({
-  PlayerRead,
+export const RouterCerebroEvent = router({
+  EventRead,
 })

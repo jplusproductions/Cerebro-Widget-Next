@@ -1,15 +1,10 @@
 import { z } from "zod"
 
-// Application Architecture || Define Imports
-// =======================================================================================
-// =======================================================================================
-import { paginationInputs, paginationOutputs } from "@/prisma/validators/filters"
-
 // Application Architecture || Define Inputs
 // =======================================================================================
 // =======================================================================================
 export const PlayerReadInputs = z.object({
-  ...paginationInputs.shape,
+  id: z.string().describe("The unique identifier of the player"),
 })
 
 // Application Architecture || Define Outputs
@@ -44,3 +39,4 @@ export interface GraphQLPlayer {
 
 export type TPlayerReadInputs = z.TypeOf<typeof PlayerReadInputs>
 export type TPlayerReadOutputs = z.TypeOf<typeof PlayerReadOutputs>
+export type TPlayersListItem = TPlayerReadOutputs
