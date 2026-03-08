@@ -1,6 +1,7 @@
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
+import { TRPCError } from "@trpc/server"
 import { whiteListProcedure } from "@/server/trpc"
 import { CerebroGraphqlApi } from "@/server/foreign-sdks/sdk-cerebro-graphql/cerebro-graphql-api"
 import { GraphQLPlayer, PlayerReadInputs, PlayerReadOutputs } from "./PlayerReadIO"
@@ -24,7 +25,6 @@ export const PlayerRead = whiteListProcedure
   .meta({
     openapi: {
       method: "GET",
-      protect: true,
       path: "/cerebro/player/read",
       summary: "PlayerRead() -> Returns a specific player.",
       tags: ["Players"],
@@ -56,7 +56,7 @@ export const PlayerRead = whiteListProcedure
     )
 
     const p = data.player_by_pk
-    if (!p) throw new Error(`Player not found: ${input.id}`)
+    if (!p) throw new TRPCError({ code: "NOT_FOUND", message: `Player not found: ${input.id}` })
 
     return {
       id: p.id,

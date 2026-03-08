@@ -11,6 +11,7 @@ import { EventReadOutputs } from "@/server/trpc-routers/router-cerebro-event/Eve
 // =======================================================================================
 export const EventsListInputs = z.object({
   ...paginationInputs.shape,
+  search: z.string().optional().describe("Filter events by name (case-insensitive)"),
 })
 
 // Application Architecture || Define Outputs

@@ -1,15 +1,14 @@
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { whiteListProcedure } from "@/server/trpc"
+import { protectedProcedure } from "@/server/trpc"
 import { ExposureClient } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-api"
 import { EventsListInputs, EventsListOutputs } from "./EventsListIO"
-import { TRPCError } from "@trpc/server"
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const EventsList = whiteListProcedure
+export const EventsList = protectedProcedure
   .meta({
     openapi: {
       method: "GET",

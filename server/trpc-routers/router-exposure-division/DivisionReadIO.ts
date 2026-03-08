@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { ExposureDivision } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
+import type { Division } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
 
 // Application Architecture || Define Inputs
 // =======================================================================================
@@ -12,7 +12,7 @@ export const DivisionReadInputs = z.object({
 // Application Architecture || Define Outputs
 // =======================================================================================
 // =======================================================================================
-export const DivisionReadOutputs = z.custom<ExposureDivision>()
+export const DivisionReadOutputs = z.custom<Division>()
 
 // Application Architecture || Define Typologies
 // =======================================================================================

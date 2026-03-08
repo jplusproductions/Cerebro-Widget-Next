@@ -1,6 +1,18 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios"
 import { createHmac } from "crypto"
-import { throwExposureError, type ExposureEventsPaginatedResponse, type ExposureEventParams, type ExposureEventsParams, type ExposureDivisionsParams, type ExposureTeamsParams, type ExposureGameParams, type ExposureGamesParams, type ExposureUpdateGameParams, type ExposureStandingsParams, type ExposurePlayersParams, type ExposureStatisticsParams, type ExposureVenuesParams, type ExposureEvent, type ExposureDivision, type ExposureTeam, type ExposureGame, type ExposureStanding, type ExposurePlayer, type ExposureStatistic, type ExposureVenue, type ExposureRegisterPayload, type ExposureRegisterResponse, type ExposurePaymentPayload, type ExposurePaymentResponse } from "./exposure-events-types"
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios"
+
+// Application Architecture || Define Imports
+// =======================================================================================
+// =======================================================================================
+import type { Event, Division, Team, Game, GameUpdateRequest, Player, StandingsResponse, StandingsUpdateRequest, StatisticsResponse, Venue, RegisterRequest, RegisterResponse, PaymentRequest, PaymentResponse, DivisionCreateRequest, DivisionCreateResponse, DivisionUpdateRequest, TeamCreateRequest, TeamCreateResponse, TeamUpdateRequest } from "./exposure-events-types"
+import { throwExposureError } from "./exposure-events-utils"
+
+// Application Architecture || Define Local Types
+// =======================================================================================
+type ExposureEventsPaginatedResponse<T> = {
+  results: T[]
+  pagination: { page: number; pageSize: number; totalPages: number; totalRecords: number }
+}
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -89,13 +101,13 @@ export class ExposureEventsApi {
     const params: Record<string, unknown> = { id }
     if (includes) params.includes = includes
     const { data } = await this.client.get("/api/v1/events", { params })
-    return data.Event as ExposureEvent
+    return data.Event as Event
   }
 
-  async getEvents(params?: ExposureEventsParams) {
+  async getEvents(params?: Record<string, unknown>) {
     const cleaned = params ? this.stripUndefined(params) : undefined
     const { data } = await this.client.get("/api/v1/events", { params: cleaned })
-    return this.unwrapList<ExposureEvent>(data, "Events")
+    return this.unwrapList<Event>(data, "Events")
   }
 
   // Application Architecture || Divisions
@@ -103,22 +115,22 @@ export class ExposureEventsApi {
   async getDivision({ id }: { id: number }) {
     const params: Record<string, unknown> = { id }
     const { data } = await this.client.get("/api/v1/divisions", { params })
-    return data.Division as ExposureDivision
+    return data.Division as Division
   }
 
-  async getDivisions(params?: ExposureDivisionsParams) {
+  async getDivisions(params?: Record<string, unknown>) {
     const { data } = await this.client.get("/api/v1/divisions", { params })
-    return this.unwrapList<ExposureDivision>(data, "Divisions")
+    return this.unwrapList<Division>(data, "Divisions")
   }
 
-  async createDivision(body: Partial<ExposureDivision>) {
+  async createDivision(body: DivisionCreateRequest) {
     const { data } = await this.client.post("/api/v1/divisions", body)
-    return data as ExposureDivision
+    return data as DivisionCreateResponse
   }
 
-  async updateDivision(body: Partial<ExposureDivision>) {
+  async updateDivision(body: DivisionUpdateRequest) {
     const { data } = await this.client.put("/api/v1/divisions", body)
-    return data as ExposureDivision
+    return data as Division
   }
 
   // Application Architecture || Teams
@@ -126,22 +138,22 @@ export class ExposureEventsApi {
   async getTeam({ id }: { id: number }) {
     const params: Record<string, unknown> = { id }
     const { data } = await this.client.get("/api/v1/teams", { params })
-    return data.Team as ExposureTeam
+    return data.Team as Team
   }
 
-  async getTeams(params?: ExposureTeamsParams) {
+  async getTeams(params?: Record<string, unknown>) {
     const { data } = await this.client.get("/api/v1/teams", { params })
-    return this.unwrapList<ExposureTeam>(data, "Teams")
+    return this.unwrapList<Team>(data, "Teams")
   }
 
-  async createTeam(body: Partial<ExposureTeam>) {
+  async createTeam(body: TeamCreateRequest) {
     const { data } = await this.client.post("/api/v1/teams", body)
-    return data as ExposureTeam
+    return data as TeamCreateResponse
   }
 
-  async updateTeam(body: Partial<ExposureTeam>) {
+  async updateTeam(body: TeamUpdateRequest) {
     const { data } = await this.client.put("/api/v1/teams", body)
-    return data as ExposureTeam
+    return data as Team
   }
 
   // Application Architecture || Games
@@ -150,18 +162,18 @@ export class ExposureEventsApi {
     const params: Record<string, unknown> = { id }
     if (includes) params.includes = includes
     const { data } = await this.client.get("/api/v1/games", { params })
-    return data.Game as ExposureGame
+    return data.Game as Game
   }
 
-  async getGames(params?: ExposureGamesParams) {
+  async getGames(params?: Record<string, unknown>) {
     const cleaned = params ? this.stripUndefined(params) : undefined
     const { data } = await this.client.get("/api/v1/games", { params: cleaned })
-    return this.unwrapList<ExposureGame>(data, "Games")
+    return this.unwrapList<Game>(data, "Games")
   }
 
-  async updateGame(params: ExposureUpdateGameParams) {
+  async updateGame(params: GameUpdateRequest) {
     const { data } = await this.client.put("/api/v1/games", params)
-    return data as ExposureGame
+    return data as Game
   }
 
   // Application Architecture || Standings
@@ -169,17 +181,17 @@ export class ExposureEventsApi {
   async getStanding({ id }: { id: number }) {
     const params: Record<string, unknown> = { id }
     const { data } = await this.client.get("/api/v1/standings", { params })
-    return data.Standing as ExposureStanding
+    return data as StandingsResponse
   }
 
-  async getStandings(params: ExposureStandingsParams) {
+  async getStandings(params: Record<string, unknown>) {
     const { data } = await this.client.get("/api/v1/standings", { params })
-    return this.unwrapList<ExposureStanding>(data, "Standings")
+    return data as StandingsResponse
   }
 
-  async updateStandings(body: Partial<ExposureStanding>) {
+  async updateStandings(body: StandingsUpdateRequest) {
     const { data } = await this.client.put("/api/v1/standings", body)
-    return data as ExposureStanding
+    return data as StandingsResponse
   }
 
   // Application Architecture || Players
@@ -187,19 +199,19 @@ export class ExposureEventsApi {
   async getPlayer({ id }: { id: number }) {
     const params: Record<string, unknown> = { id }
     const { data } = await this.client.get("/api/v1/players", { params })
-    return data.Player as ExposurePlayer
+    return data.Player as Player
   }
 
-  async getPlayers(params?: ExposurePlayersParams) {
+  async getPlayers(params?: Record<string, unknown>) {
     const { data } = await this.client.get("/api/v1/players", { params })
-    return this.unwrapList<ExposurePlayer>(data, "Players")
+    return this.unwrapList<Player>(data, "Players")
   }
 
   // Application Architecture || Statistics
   // =====================================================================================
-  async getStatistics(params: ExposureStatisticsParams) {
+  async getStatistics(params: Record<string, unknown>) {
     const { data } = await this.client.get("/api/v1/statistics", { params })
-    return this.unwrapList<ExposureStatistic>(data, "Statistics")
+    return data as StatisticsResponse
   }
 
   // Application Architecture || Venues
@@ -207,24 +219,24 @@ export class ExposureEventsApi {
   async getVenue({ id }: { id: number }) {
     const params: Record<string, unknown> = { id }
     const { data } = await this.client.get("/api/v1/venues", { params })
-    return data.Venue as ExposureVenue
+    return data.Venue as Venue
   }
 
-  async getVenues(params?: ExposureVenuesParams) {
+  async getVenues(params?: Record<string, unknown>) {
     const { data } = await this.client.get("/api/v1/venues", { params })
-    return this.unwrapList<ExposureVenue>(data, "Venues")
+    return this.unwrapList<Venue>(data, "Venues")
   }
 
   // Application Architecture || Registration & Payments
   // =====================================================================================
-  async register(body: ExposureRegisterPayload) {
+  async register(body: RegisterRequest) {
     const { data } = await this.client.post("/api/v1/register", body)
-    return data as ExposureRegisterResponse
+    return data as RegisterResponse
   }
 
-  async createPayment(body: ExposurePaymentPayload) {
+  async createPayment(body: PaymentRequest) {
     const { data } = await this.client.post("/api/v1/payments", body)
-    return data as ExposurePaymentResponse
+    return data as PaymentResponse
   }
 }
 

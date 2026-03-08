@@ -5,8 +5,6 @@ import { router } from "@/server/trpc"
 // =======================================================================================
 import { AuthLogin } from "./AuthLogin"
 import { AuthLogout } from "./AuthLogout"
-import { AuthRegisterLocal } from "./AuthRegisterLocal"
-import { AuthSessionRead } from "./AuthSessionRead"
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -14,6 +12,4 @@ import { AuthSessionRead } from "./AuthSessionRead"
 export const RouterAuth = router({
   AuthLogin,
   AuthLogout,
-  AuthRegisterLocal,
-  AuthSessionRead,
 })

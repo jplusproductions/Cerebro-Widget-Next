@@ -11,6 +11,9 @@ import { PlayerReadOutputs } from "@/server/trpc-routers/router-cerebro-player/P
 // =======================================================================================
 export const PlayersListInputs = z.object({
   ...paginationInputs.shape,
+  search: z.string().optional().describe("Filter players by name (case-insensitive)"),
+  eventId: z.string().optional().describe("Filter players by event ID"),
+  teamId: z.string().optional().describe("Filter players by team ID"),
 })
 
 // Application Architecture || Define Outputs

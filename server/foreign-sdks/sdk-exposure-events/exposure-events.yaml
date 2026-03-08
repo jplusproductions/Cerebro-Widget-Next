@@ -155,6 +155,7 @@ components:
         Type:
           type: string
           description: "ReportOutput enum: HTML, PDF"
+          enum: [HTML, PDF]
         DateModified:
           type: string
           format: date-time
@@ -167,6 +168,7 @@ components:
         Type:
           type: integer
           description: "PriceType enum: 1=EventFee, 2=Other, 3=CollegeCoach, 4=SanctionFee, 5=GateFee"
+          enum: [1, 2, 3, 4, 5]
         Name:
           type: string
         Amount:
@@ -181,6 +183,7 @@ components:
         Type:
           type: string
           description: "EventCertification enum: AAU, IndiHoops, JrNBA, NationalSportsId, NCAACertified, NCAACertifiedPending, NTBA, USATournamentAlliance, USSSA"
+          enum: [AAU, IndiHoops, JrNBA, NationalSportsId, NCAACertified, NCAACertifiedPending, NTBA, USATournamentAlliance, USSSA]
         Name:
           type: string
 
@@ -236,6 +239,7 @@ components:
         RegistrationStatus:
           type: integer
           description: "RegistrationStatus enum: 1=All, 2=Active, 3=ActiveAndPaid, 4=ActivePaidAndTravel"
+          enum: [1, 2, 3, 4]
         RegistrationStartDate:
           type: string
         RegistrationEndDate:
@@ -269,6 +273,7 @@ components:
         Gender:
           type: integer
           description: "Gender enum: 0=MaleAndFemale, 1=Male, 2=Female, 4=AllGenders"
+          enum: [0, 1, 2, 4]
         Name:
           type: string
         Organization:
@@ -278,12 +283,15 @@ components:
         Type:
           type: integer
           description: "EventType enum: 0=Tournament, 1=League, 2=CampClinic, 3=Tryout, 4=Practice, 5=Training"
+          enum: [0, 1, 2, 3, 4, 5]
         InviteType:
           type: integer
           description: "EventInviteType enum: 0=All, 3=Travel, 4=School, 9=InviteOnly, 10=JuniorVarsity, 11=Freshman, 12=HighSchool, 13=MiddleSchool, 14=ElementarySchool, 15=Varsity"
+          enum: [0, 3, 4, 9, 10, 11, 12, 13, 14, 15]
         ParticipationType:
           type: integer
           description: "ParticipationType enum: 0=Team, 1=Individual"
+          enum: [0, 1]
         Image:
           type: string
           description: Event image URL
@@ -391,7 +399,8 @@ components:
           type: integer
         RegistrationStatus:
           type: integer
-          description: "RegistrationStatus enum"
+          description: "RegistrationStatus enum: 1=All, 2=Active, 3=ActiveAndPaid, 4=ActivePaidAndTravel"
+          enum: [1, 2, 3, 4]
         ShowStandings:
           type: boolean
         ShowSchedule:
@@ -564,6 +573,7 @@ components:
         Type:
           type: integer
           description: "CoachType enum: 0=Other, 1=HeadCoach, 2=AssistantCoach, 3=Administrator, 4=AdministratorHeadCoach, 5=AdministratorCoach, 6=BenchCoach, 7=Coach, 8=Manager, 9=ParentGuardian, 10=Player"
+          enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         FirstName:
           type: string
         LastName:
@@ -629,6 +639,7 @@ components:
         Status:
           type: integer
           description: "RosterStatus enum: 0=Active, 1=Inactive, 2=Archived"
+          enum: [0, 1, 2]
         Address:
           $ref: "#/components/schemas/Address"
         Meta:
@@ -667,12 +678,14 @@ components:
           type: string
         Gender:
           type: integer
-          description: "Gender enum"
+          description: "Gender enum: 0=MaleAndFemale, 1=Male, 2=Female, 4=AllGenders"
+          enum: [0, 1, 2, 4]
         Paid:
           type: boolean
         Status:
           type: integer
           description: "EventStatus enum: 0=None, 1=Active, 2=Inactive, 3=WaitingList"
+          enum: [0, 1, 2, 3]
         Division:
           $ref: "#/components/schemas/TeamDivisionSummary"
         Address:
@@ -745,13 +758,15 @@ components:
           type: integer
         Gender:
           type: integer
-          description: "Gender enum"
+          description: "Gender enum: 0=MaleAndFemale, 1=Male, 2=Female, 4=AllGenders"
+          enum: [0, 1, 2, 4]
         Paid:
           type: boolean
           default: true
         Status:
           type: integer
-          description: "EventStatus enum"
+          description: "EventStatus enum: 0=None, 1=Active, 2=Inactive, 3=WaitingList"
+          enum: [0, 1, 2, 3]
         Age:
           type: string
           description: Age group
@@ -913,6 +928,7 @@ components:
         WonBy:
           type: integer
           description: "WonByType enum: 7=Forfeit"
+          enum: [7]
         Color:
           type: string
           description: Hex color code
@@ -944,6 +960,7 @@ components:
         Round:
           type: integer
           description: "BracketRoundType enum: 0=None, 1=Championship, 2=Semifinal, 3=Quarterfinal"
+          enum: [0, 1, 2, 3]
 
     GameSingleResponse:
       type: object
@@ -980,10 +997,12 @@ components:
           type: integer
         awayteamwonby:
           type: integer
-          description: "WonByType enum"
+          description: "WonByType enum: 7=Forfeit"
+          enum: [7]
         hometeamwonby:
           type: integer
-          description: "WonByType enum"
+          description: "WonByType enum: 7=Forfeit"
+          enum: [7]
         externalid:
           type: string
           description: External vendor game ID for statistics
@@ -1337,6 +1356,7 @@ components:
         type:
           type: integer
           description: "CoachType enum, default Other (0)"
+          enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         ncaacoachesapprovalnumber:
           type: string
           maxLength: 100
@@ -1503,7 +1523,8 @@ components:
           description: Participation year
         gender:
           type: integer
-          description: "Gender enum"
+          description: "Gender enum: 0=MaleAndFemale, 1=Male, 2=Female, 4=AllGenders"
+          enum: [0, 1, 2, 4]
         notes:
           type: string
         markaspaid:
@@ -1739,7 +1760,8 @@ paths:
           in: query
           schema:
             type: integer
-          description: "EventType enum filter"
+            enum: [0, 1, 2, 3, 4, 5]
+          description: "EventType enum filter: 0=Tournament, 1=League, 2=CampClinic, 3=Tryout, 4=Practice, 5=Training"
         - name: includes
           in: query
           schema:
@@ -1886,7 +1908,8 @@ paths:
           in: query
           schema:
             type: integer
-          description: "EventStatus enum filter"
+            enum: [0, 1, 2, 3]
+          description: "EventStatus enum filter: 0=None, 1=Active, 2=Inactive, 3=WaitingList"
         - name: Paid
           in: query
           schema:
@@ -2072,6 +2095,7 @@ paths:
           schema:
             type: string
             default: Pool
+            enum: [Pool, Division, Event, Bracket]
           description: "StandingsDisplay enum: Pool, Division, Event, Bracket"
       responses:
         "200":

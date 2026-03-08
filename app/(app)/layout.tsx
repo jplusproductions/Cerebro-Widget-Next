@@ -5,7 +5,7 @@ import { Suspense, useCallback, useState } from "react"
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import ThemeToggle from "@/app/components/theme-toggle"
+import { ThemeToggle } from "@AppComps/@Tailwind"
 
 // Application Architecture || Define Constants
 // =======================================================================================
@@ -29,7 +29,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
   const view = searchParams.get("view") || "schedules"
   const initialTheme = searchParams.get("theme") || "light"
   const banner = searchParams.get("banner") !== "false"
-  const themeToggle = true
+  const ThemeToggle = true
 
   const [isDark, setIsDark] = useState(initialTheme === "dark")
 
@@ -49,7 +49,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
               Cerebro Sports Framework
             </h1>
             <div className="flex items-center gap-3">
-              {themeToggle && (
+              {ThemeToggle && (
                 <ThemeToggle isDark={isDark} />
               )}
               <select

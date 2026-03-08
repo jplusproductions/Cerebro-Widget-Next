@@ -4,7 +4,7 @@ import { scripts } from "chalk-scripts"
 // Application Architecture || Define Client
 // =======================================================================================
 // =======================================================================================
-const script = scripts({ id: "Cerebro", name: "CerebroAuthApi()" })
+const script = scripts({ name: "CerebroAuthApi()" })
 
 // Application Architecture || Define Exports
 // =======================================================================================

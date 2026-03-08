@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { ExposureVenue } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
+import type { Venue } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
 
 // Application Architecture || Define Imports
 // =======================================================================================
@@ -17,7 +17,7 @@ export const VenuesListInputs = z.object({
 // Application Architecture || Define Singletons
 // =======================================================================================
 // =======================================================================================
-export const VenuesListItem = z.custom<ExposureVenue>()
+export const VenuesListItem = z.custom<Venue>()
 
 // Application Architecture || Define Outputs
 // =======================================================================================

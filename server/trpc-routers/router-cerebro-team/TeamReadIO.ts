@@ -1,28 +1,20 @@
-import { z, TypeOf } from "zod"
+import { z } from "zod"
+import type { Team } from "@/server/foreign-sdks/sdk-cerebro-graphql/cerebro-graphql-types"
 
 // Application Architecture || Define Inputs
 // =======================================================================================
 // =======================================================================================
-export const AuthSessionReadInputs = z.void()
+export const TeamReadInputs = z.object({
+  id: z.string().describe("The unique identifier of the team"),
+})
 
 // Application Architecture || Define Outputs
 // =======================================================================================
 // =======================================================================================
-export const AuthSessionReadOutputs = z.object({
-  user: z.object({
-    id: z.string(),
-    name: z.string(),
-    email: z.string(),
-  }),
-  session: z.object({
-    id: z.string(),
-    token: z.string(),
-    expiresAt: z.coerce.date(),
-  }),
-}).nullable()
+export const TeamReadOutputs = z.custom<Team>()
 
 // Application Architecture || Define Typologies
 // =======================================================================================
 // =======================================================================================
-export type TAuthSessionReadInputs = TypeOf<typeof AuthSessionReadInputs>
-export type TAuthSessionReadOutputs = TypeOf<typeof AuthSessionReadOutputs>
+export type TTeamReadInputs = z.TypeOf<typeof TeamReadInputs>
+export type TTeamReadOutputs = z.TypeOf<typeof TeamReadOutputs>

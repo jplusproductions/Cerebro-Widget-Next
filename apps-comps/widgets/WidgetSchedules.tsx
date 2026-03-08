@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query"
 // =======================================================================================
 import { useTRPC } from "@AppComps/@TRPCProvider"
 import TablePagination from "@AppComps/table/TablePagination"
-import type { ExposureGame } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
+import type { Game } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
 
 // Application Architecture || Define Helpers
 // =======================================================================================
@@ -22,12 +22,12 @@ function formatDateHeading(dateStr: string): string {
   })
 }
 
-function isGameCompleted(game: ExposureGame): boolean {
+function isGameCompleted(game: Game): boolean {
   return game.AwayTeam.Score != null && game.HomeTeam.Score != null
     && (game.AwayTeam.Score > 0 || game.HomeTeam.Score > 0)
 }
 
-function getGameStatus(game: ExposureGame): { label: string; color: string } | null {
+function getGameStatus(game: Game): { label: string; color: string } | null {
   if (isGameCompleted(game)) return null
   // If game has a time and hasn't been played, show the time
   if (game.Time) {
@@ -40,7 +40,7 @@ function getGameStatus(game: ExposureGame): { label: string; color: string } | n
   return null
 }
 
-function getRoundLabel(game: ExposureGame): string {
+function getRoundLabel(game: Game): string {
   if (game.BracketName) return game.BracketName
   switch (game.Round) {
     case 1: return "Championship"
@@ -50,8 +50,8 @@ function getRoundLabel(game: ExposureGame): string {
   }
 }
 
-function groupByDate(games: ExposureGame[]): Map<string, ExposureGame[]> {
-  const map = new Map<string, ExposureGame[]>()
+function groupByDate(games: Game[]): Map<string, Game[]> {
+  const map = new Map<string, Game[]>()
   for (const game of games) {
     const dateKey = game.Date.split("T")[0]
     const existing = map.get(dateKey)

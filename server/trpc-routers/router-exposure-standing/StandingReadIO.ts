@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { ExposureStanding } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
+import type { StandingsResponse } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
 
 // Application Architecture || Define Inputs
 // =======================================================================================
@@ -12,7 +12,7 @@ export const StandingReadInputs = z.object({
 // Application Architecture || Define Outputs
 // =======================================================================================
 // =======================================================================================
-export const StandingReadOutputs = z.custom<ExposureStanding>()
+export const StandingReadOutputs = z.custom<StandingsResponse>()
 
 // Application Architecture || Define Typologies
 // =======================================================================================

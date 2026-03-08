@@ -1,3 +1,4 @@
+import path from "path"
 import dotenv from "dotenv"
 import { execSync } from "child_process"
 import { scripts } from "chalk-scripts"
@@ -6,8 +7,16 @@ import { CerebroAuthApi } from "@/server/foreign-sdks/sdk-cerebro-auth/cerebro-a
 // Application Architecture || Define Variables
 // =======================================================================================
 // =======================================================================================
-dotenv.config()
-const script = scripts({ id: "Codegen", name: "SdkBuilder()" })
+dotenv.config({ path: path.resolve(process.cwd(), ".env") })
+const script = scripts({ name: "types:sdk" })
+
+const apis = [
+  {
+    name: "exposure-events-types.ts",
+    url: "server/foreign-sdks/sdk-exposure-events/exposure-events.yaml",
+    output: "server/foreign-sdks/sdk-exposure-events",
+  },
+]
 
 // Application Architecture || Define Functions
 // =======================================================================================
@@ -30,7 +39,7 @@ async function main() {
   const authApi = new CerebroAuthApi()
   const { jwt } = await authApi.login(email, password)
 
-  await script.insight("Running graphql-codegen...")
+  await script.insight("Generating types for cerebro-graphql-types.ts...")
   execSync("npx graphql-codegen --config apps-configs/sdk-graphql.ts", {
     stdio: "inherit",
     env: {
@@ -38,6 +47,18 @@ async function main() {
       CEREBRO_GRAPHQL_JWT: jwt,
     },
   })
+
+  for (const api of apis) {
+    await script.insight(`Generating types for ${api.name}...`)
+    const command = [
+      "npx swagger-typescript-api generate --extract-response-body --no-client",
+      `-p "${api.url}"`,
+      `-o "${api.output}"`,
+      `-n "${api.name}"`,
+      "--custom-config \"apps-configs/sdk-openapi.js\"",
+    ].join(" ")
+    execSync(command, { stdio: "inherit" })
+  }
 
   await script.success("Types generated successfully.")
 }

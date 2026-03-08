@@ -13,7 +13,7 @@ export const DivisionRead = whiteListProcedure
     openapi: {
       method: "GET",
       protect: true,
-      path: "/exposure/division/read",
+      path: "/division/exposure/read",
       summary: "DivisionRead() -> Returns a single division by ID.",
       tags: ["Divisions"],
     },

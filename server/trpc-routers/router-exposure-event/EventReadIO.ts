@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { ExposureEvent } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
+import type { Event } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
 
 // Application Architecture || Define Inputs
 // =======================================================================================
@@ -14,7 +14,7 @@ export const EventReadInputs = z.object({
 // Application Architecture || Define Outputs
 // =======================================================================================
 // =======================================================================================
-export const EventReadOutputs = z.custom<ExposureEvent>()
+export const EventReadOutputs = z.custom<Event>()
 
 // Application Architecture || Define Typologies
 // =======================================================================================

@@ -2,6 +2,7 @@
 // =======================================================================================
 // =======================================================================================
 import { whiteListProcedure } from "@/server/trpc"
+import { restrictToEvent } from "@/server/trpc-middlewares/restrict-to-event"
 import { CerebroGraphqlApi } from "@/server/foreign-sdks/sdk-cerebro-graphql/cerebro-graphql-api"
 import { GraphQLPlayer, TPlayersListItem } from "@/server/trpc-routers/router-cerebro-player/PlayerReadIO"
 import { PlayersListInputs, PlayersListOutputs } from "./PlayersListIO"
@@ -23,6 +24,7 @@ interface GraphQLPlayersResponse {
 // =======================================================================================
 // =======================================================================================
 export const PlayersList = whiteListProcedure
+  .use(restrictToEvent)
   .meta({
     openapi: {
       method: "GET",
@@ -37,9 +39,14 @@ export const PlayersList = whiteListProcedure
   .query(async ({ input, ctx: { script } }) => {
     await script.insight("Players list query")
     const offset = (input.page - 1) * input.pageSize
+    const conditions: Record<string, unknown>[] = []
+    if (input.search) conditions.push({ name: { _ilike: `%${input.search}%` } })
+    if (input.eventId) conditions.push({ player_event: { event_id: { _eq: input.eventId } } })
+    if (input.teamId) conditions.push({ player_team: { team_id: { _eq: input.teamId } } })
+    const where = conditions.length > 0 ? { _and: conditions } : undefined
     const data = await graphql.query<GraphQLPlayersResponse>(
-      `query GetPlayers($limit: Int, $offset: Int) {
-        player(limit: $limit, offset: $offset) {
+      `query GetPlayers($limit: Int, $offset: Int, $where: player_bool_exp) {
+        player(limit: $limit, offset: $offset, where: $where) {
           id
           name
           date_of_birth
@@ -54,7 +61,7 @@ export const PlayersList = whiteListProcedure
             }
           }
         }
-        player_aggregate {
+        player_aggregate(where: $where) {
           aggregate {
             count
           }
@@ -63,6 +70,7 @@ export const PlayersList = whiteListProcedure
       {
         limit: input.pageSize,
         offset,
+        where,
       })
 
     console.log("Graphql", data)

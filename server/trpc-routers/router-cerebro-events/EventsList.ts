@@ -2,22 +2,8 @@
 // =======================================================================================
 // =======================================================================================
 import { whiteListProcedure } from "@/server/trpc"
-import { CerebroGraphqlApi } from "@/server/foreign-sdks/sdk-cerebro-graphql/cerebro-graphql-api"
-import { GraphQLEvent } from "@/server/trpc-routers/router-cerebro-event/EventReadIO"
+import { CerebroClient } from "@/server/foreign-sdks/sdk-cerebro-graphql/cerebro-graphql-api"
 import { EventsListInputs, EventsListOutputs } from "./EventsListIO"
-
-// Application Architecture || Define Client
-// =======================================================================================
-// =======================================================================================
-const graphql = new CerebroGraphqlApi()
-
-// Application Architecture || Define Typologies
-// =======================================================================================
-// =======================================================================================
-interface GraphQLEventsResponse {
-  event: GraphQLEvent[]
-  event_aggregate: { aggregate: { count: number } }
-}
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -37,32 +23,10 @@ export const EventsList = whiteListProcedure
   .query(async ({ input, ctx: { script } }) => {
     await script.insight("Events list query")
     const offset = (input.page - 1) * input.pageSize
-    const data = await graphql.query<GraphQLEventsResponse>(
-      `query GetEvents($limit: Int, $offset: Int) {
-        event(limit: $limit, offset: $offset) {
-          id
-          name
-          gender
-          level
-          location
-          region
-          start_date
-          end_date
-          created_date
-          modified_date
-        }
-        event_aggregate {
-          aggregate {
-            count
-          }
-        }
-      }`,
-      {
-        limit: input.pageSize,
-        offset,
-      })
+    const where = input.search ? { name: { _ilike: `%${input.search}%` } } : undefined
+    const data = await CerebroClient.getEvents({ limit: input.pageSize, offset, where })
 
-    const totalRecords = data.event_aggregate.aggregate.count
+    const totalRecords = data.event_aggregate.aggregate?.count ?? 0
     const events = data.event.map((e) => ({
       id: e.id,
       name: e.name,

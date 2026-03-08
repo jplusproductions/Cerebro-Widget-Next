@@ -30,8 +30,5 @@ export const StatisticsList = whiteListProcedure
       pagesize: input.pageSize,
     })
 
-    return {
-      statistics: response.results,
-      pagination: response.pagination,
-    }
+    return response
   })

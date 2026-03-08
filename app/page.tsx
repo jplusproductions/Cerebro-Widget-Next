@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import ThemeToggle from "@/app/components/theme-toggle"
+import { ThemeToggle } from "@AppComps/@Tailwind"
 
 const features = [
   {

@@ -3,23 +3,17 @@ import { TRPCError } from "@trpc/server"
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { publicProcedure } from "@/server/trpc"
-import { AuthSessionReadInputs, AuthSessionReadOutputs } from "./AuthSessionReadIO"
+import { middleware } from "@/server/trpc"
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const AuthSessionRead = publicProcedure
-  .meta({
-    openapi: {
-      method: "GET",
-      path: "/auth/session/read",
-      summary: "AuthSessionRead() -> Get the current user session",
-      tags: ["Auth"],
-    },
-  })
-  .input(AuthSessionReadInputs)
-  .output(AuthSessionReadOutputs)
-  .query(async ({ ctx }) => {
-    return ctx.session
-  })
+export const restrictToEvent = middleware(async ({ ctx, getRawInput, next }) => {
+  if (!ctx.session) {
+    const input = (await getRawInput()) as Record<string, unknown> | undefined
+    if (!input?.eventId) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "eventId is required when not authenticated" })
+    }
+  }
+  return next()
+})

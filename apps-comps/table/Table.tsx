@@ -18,7 +18,7 @@ const getAlign = (meta: unknown): TextAlign => (meta as { align?: TextAlign })?.
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export default function Table<T>({ columns, data, name, isLoading, rowHeight = "h-4", pagination, setPagination, emptyMessage = "No results found." }: ITableProps<T>) {
+export default function Table<T>({ columns, data, name, isLoading, rowHeight = "h-4", pagination, setPagination, onRowClick, emptyMessage = "No results found." }: ITableProps<T>) {
   const table = useReactTable({
     data,
     columns,
@@ -26,10 +26,10 @@ export default function Table<T>({ columns, data, name, isLoading, rowHeight = "
   })
 
   return (
-    <div className="space-y-4">
-      <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">
+    <div className="flex min-h-0 flex-1 flex-col gap-4">
+      <div className="min-h-75 flex-1 overflow-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/50">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
+          <thead className="sticky top-0 z-10 border-b border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -55,7 +55,11 @@ export default function Table<T>({ columns, data, name, isLoading, rowHeight = "
               </tr>
             ))}
             {!isLoading && table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="bg-white dark:bg-zinc-900/50">
+              <tr
+                key={row.id}
+                onClick={onRowClick ? () => onRowClick(row.original) : undefined}
+                className={`bg-white dark:bg-zinc-900/50${onRowClick ? " cursor-pointer transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50" : ""}`}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
@@ -94,5 +98,6 @@ export interface ITableProps<T> {
   pagination: IPagination
   rowHeight?: string
   setPagination?: (page: number) => void
+  onRowClick?: (row: T) => void
   emptyMessage?: string
 }

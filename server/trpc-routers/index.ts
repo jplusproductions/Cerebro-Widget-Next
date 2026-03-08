@@ -6,8 +6,12 @@ import { router } from "@/server/trpc"
 // import { RouterAuth } from "./router-auth/@index"
 import { RouterCerebroEvent } from "./router-cerebro-event/@index"
 import { RouterCerebroEvents } from "./router-cerebro-events/@index"
+import { RouterCerebroGame } from "./router-cerebro-game/@index"
+import { RouterCerebroGames } from "./router-cerebro-games/@index"
 import { RouterCerebroPlayer } from "./router-cerebro-player/@index"
 import { RouterCerebroPlayers } from "./router-cerebro-players/@index"
+import { RouterCerebroTeam } from "./router-cerebro-team/@index"
+import { RouterCerebroTeams } from "./router-cerebro-teams/@index"
 // import { RouterExposureDivision } from "./router-exposure-division/@index"
 // import { RouterExposureDivisions } from "./router-exposure-divisions/@index"
 import { RouterExposureEvent } from "./router-exposure-event/@index"
@@ -34,8 +38,12 @@ export const AppRouter = router({
   // RouterAuth,
   RouterCerebroEvent,
   RouterCerebroEvents,
+  RouterCerebroGame,
+  RouterCerebroGames,
   RouterCerebroPlayer,
   RouterCerebroPlayers,
+  RouterCerebroTeam,
+  RouterCerebroTeams,
   // RouterExposureDivision,
   // RouterExposureDivisions,
   RouterExposureEvent,

@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { ExposureTeam } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
+import type { Team } from "@/server/foreign-sdks/sdk-exposure-events/exposure-events-types"
 
 // Application Architecture || Define Imports
 // =======================================================================================
@@ -16,7 +16,7 @@ export const TeamsListInputs = z.object({
 // Application Architecture || Define Singletons
 // =======================================================================================
 // ===================================================================================
-export const TeamsListItem = z.custom<ExposureTeam>()
+export const TeamsListItem = z.custom<Team>()
 
 // Application Architecture || Define Outputs
 // =======================================================================================

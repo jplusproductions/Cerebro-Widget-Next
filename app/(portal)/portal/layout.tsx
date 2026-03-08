@@ -6,15 +6,41 @@ import { usePathname } from "next/navigation"
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import ThemeToggle from "@/app/components/theme-toggle"
+import { ThemeToggle } from "@AppComps/@Tailwind"
 
 // Application Architecture || Define Variables
 // =======================================================================================
 // =======================================================================================
 const navItems = [
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Players", href: "/players" },
+  { label: "Dashboard", href: "/portal" },
+  { label: "Events", href: "/portal/events" },
+  { label: "Teams", href: "/portal/teams" },
+  { label: "Games", href: "/portal/games" },
+  { label: "Players", href: "/portal/players" },
 ]
+
+const segmentLabels: Record<string, string> = {
+  portal: "Portal",
+  events: "Events",
+  teams: "Teams",
+  games: "Games",
+  players: "Players",
+}
+
+function buildBreadcrumbs(pathname: string) {
+  const segments = pathname.split("/").filter(Boolean) // ["portal", "events", ...]
+  return segments.map((seg, i, arr) => {
+    let label = segmentLabels[seg]
+    if (!label) {
+      // Dynamic segment — use contextual label based on parent
+      const parent = arr[i - 1]
+      label = parent
+        ? `View ${parent.replace(/s$/, "").replace(/^./, c => c.toUpperCase())}`
+        : seg
+    }
+    return { label, href: `/${ segments.slice(0, i + 1).join("/")}` }
+  })
+}
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -23,7 +49,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname()
 
   return (
-    <div className="flex min-h-screen bg-zinc-50 dark:bg-zinc-950">
+    <div className="flex h-screen overflow-hidden bg-zinc-50 dark:bg-zinc-950">
       {/* Sidebar */}
       <aside className="flex w-56 shrink-0 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex items-center gap-2.5 px-5 py-5">
@@ -32,7 +58,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         </div>
         <nav className="flex flex-1 flex-col gap-1 px-3 pt-2">
           {navItems.map((item) => {
-            const active = pathname === item.href
+            const active = item.href === "/portal" ? pathname === item.href : pathname.startsWith(item.href)
             return (
               <Link
                 key={item.href}
@@ -51,14 +77,30 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
       </aside>
 
       {/* Main */}
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-h-0 flex-1 flex-col">
         {/* Topbar */}
         <header className="flex h-14 items-center justify-between border-b border-zinc-200 bg-white px-6 dark:border-zinc-800 dark:bg-zinc-900">
-          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Admin Portal</h2>
+          <nav className="flex items-center gap-1.5 text-sm">
+            {buildBreadcrumbs(pathname).map((crumb, i, arr) => {
+              const isLast = i === arr.length - 1
+              return (
+                <span key={crumb.href} className="flex items-center gap-1.5">
+                  {i > 0 && <span className="text-zinc-300 dark:text-zinc-600">/</span>}
+                  {isLast ? (
+                    <span className="font-semibold text-zinc-900 dark:text-zinc-100">{crumb.label}</span>
+                  ) : (
+                    <Link href={crumb.href} className="text-zinc-500 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+                      {crumb.label}
+                    </Link>
+                  )}
+                </span>
+              )
+            })}
+          </nav>
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <Link
-              href="/"
+              href="/login"
               aria-label="Log out"
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
             >
@@ -70,7 +112,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
         </header>
 
         {/* Content */}
-        <main className="flex-1 p-6">
+        <main className="flex min-h-0 flex-1 flex-col overflow-auto p-6">
           {children}
         </main>
       </div>

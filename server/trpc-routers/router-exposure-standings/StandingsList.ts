@@ -30,8 +30,5 @@ export const StandingsList = whiteListProcedure
       display: input.display,
     })
 
-    return {
-      standings: response.results,
-      pagination: response.pagination,
-    }
+    return response
   })

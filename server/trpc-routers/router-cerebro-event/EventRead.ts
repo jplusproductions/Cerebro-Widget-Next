@@ -1,21 +1,10 @@
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
+import { TRPCError } from "@trpc/server"
 import { whiteListProcedure } from "@/server/trpc"
-import { CerebroGraphqlApi } from "@/server/foreign-sdks/sdk-cerebro-graphql/cerebro-graphql-api"
-import { GraphQLEvent, EventReadInputs, EventReadOutputs } from "./EventReadIO"
-
-// Application Architecture || Define Client
-// =======================================================================================
-// =======================================================================================
-const graphql = new CerebroGraphqlApi()
-
-// Application Architecture || Define Typologies
-// =======================================================================================
-// =======================================================================================
-interface GraphQLEventResponse {
-  event_by_pk: GraphQLEvent | null
-}
+import { CerebroClient } from "@/server/foreign-sdks/sdk-cerebro-graphql/cerebro-graphql-api"
+import { EventReadInputs, EventReadOutputs } from "./EventReadIO"
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -34,26 +23,8 @@ export const EventRead = whiteListProcedure
   .output(EventReadOutputs)
   .query(async ({ input, ctx: { script } }) => {
     await script.insight("Event Read query")
-    const data = await graphql.query<GraphQLEventResponse>(
-      `query GetEvent($id: uuid!) {
-        event_by_pk(id: $id) {
-          id
-          name
-          gender
-          level
-          location
-          region
-          start_date
-          end_date
-          created_date
-          modified_date
-        }
-      }`,
-      { id: input.id },
-    )
-
-    const e = data.event_by_pk
-    if (!e) throw new Error(`Event not found: ${input.id}`)
+    const e = await CerebroClient.getEvent({ id: input.id })
+    if (!e) throw new TRPCError({ code: "NOT_FOUND", message: `Event not found: ${input.id}` })
 
     return {
       id: e.id,

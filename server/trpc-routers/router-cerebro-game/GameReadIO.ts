@@ -1,27 +1,20 @@
-import { z, TypeOf } from "zod"
+import { z } from "zod"
+import type { Game } from "@/server/foreign-sdks/sdk-cerebro-graphql/cerebro-graphql-types"
 
 // Application Architecture || Define Inputs
 // =======================================================================================
 // =======================================================================================
-export const AuthRegisterLocalInputs = z.object({
-  name: z.string().min(1)
-    .describe("The user's display name"),
-  email: z.string().email()
-    .describe("The user's email address"),
-  password: z.string().min(8)
-    .describe("The user's password"),
+export const GameReadInputs = z.object({
+  id: z.string().describe("The unique identifier of the game"),
 })
 
 // Application Architecture || Define Outputs
 // =======================================================================================
 // =======================================================================================
-export const AuthRegisterLocalOutputs = z.object({
-  token: z.string()
-    .describe("The session token"),
-})
+export const GameReadOutputs = z.custom<Game>()
 
 // Application Architecture || Define Typologies
 // =======================================================================================
 // =======================================================================================
-export type TAuthRegisterLocalInputs = TypeOf<typeof AuthRegisterLocalInputs>
-export type TAuthRegisterLocalOutputs = TypeOf<typeof AuthRegisterLocalOutputs>
+export type TGameReadInputs = z.TypeOf<typeof GameReadInputs>
+export type TGameReadOutputs = z.TypeOf<typeof GameReadOutputs>

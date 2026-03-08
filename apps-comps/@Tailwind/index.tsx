@@ -1,11 +1,10 @@
 "use client"
-
 import { useState } from "react"
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export default function ThemeToggle({ isDark = false }: ThemeToggleProps = {}) {
+export const ThemeToggle = ({ isDark = false }: IThemeToggleProps = {}) => {
   const [dark, setDark] = useState<boolean>(isDark)
 
   function toggle() {
@@ -39,6 +38,6 @@ export default function ThemeToggle({ isDark = false }: ThemeToggleProps = {}) {
 // Application Architecture || Define Typologies
 // =======================================================================================
 // =======================================================================================
-interface ThemeToggleProps {
+interface IThemeToggleProps {
   isDark?: boolean
 }
