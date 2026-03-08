@@ -24,7 +24,6 @@ interface GraphQLPlayersResponse {
 // =======================================================================================
 // =======================================================================================
 export const PlayersList = whiteListProcedure
-  .use(restrictToEvent)
   .meta({
     openapi: {
       method: "GET",
@@ -34,6 +33,7 @@ export const PlayersList = whiteListProcedure
       tags: ["Players"],
     },
   })
+  .use(restrictToEvent)
   .input(PlayersListInputs)
   .output(PlayersListOutputs)
   .query(async ({ input, ctx: { script } }) => {
@@ -72,8 +72,6 @@ export const PlayersList = whiteListProcedure
         offset,
         where,
       })
-
-    console.log("Graphql", data)
 
     const totalRecords = data.player_aggregate.aggregate.count
     const players: TPlayersListItem[] = data.player.map((p) => ({

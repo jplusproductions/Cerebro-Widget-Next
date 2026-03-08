@@ -2,18 +2,34 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useMutation } from "@tanstack/react-query"
 import Image from "next/image"
 import Link from "next/link"
 
+// Application Architecture || Define Imports
+// =======================================================================================
+// =======================================================================================
+import { useTRPC } from "@AppComps/@TRPCProvider"
+
+// Application Architecture || Define Exports
+// =======================================================================================
+// =======================================================================================
 export default function LoginPage() {
+  const trpc = useTRPC()
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+
+  const login = useMutation(trpc.RouterAuth.AuthLogin.mutationOptions({
+    onSuccess: () => router.push("/portal"),
+    onError: () => setError("Invalid email or password."),
+  }))
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    // No auth wiring — navigate directly to dashboard
-    router.push("/dashboard")
+    setError("")
+    login.mutate({ email, password })
   }
 
   return (
@@ -32,6 +48,12 @@ export default function LoginPage() {
           onSubmit={handleSubmit}
           className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
         >
+          {error && (
+            <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-400">
+              {error}
+            </p>
+          )}
+
           <label className="mb-4 block">
             <span className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Email</span>
             <input
@@ -58,21 +80,12 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-zinc-900 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+            disabled={login.isPending}
+            className="w-full rounded-lg bg-zinc-900 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
           >
-            Sign In
+            {login.isPending ? "Signing in..." : "Sign In"}
           </button>
         </form>
-
-        {process.env.NODE_ENV === "development" && (
-          <button
-            type="button"
-            onClick={() => router.push("/portal")}
-            className="mt-4 w-full rounded-lg border border-dashed border-amber-400 bg-amber-50 py-2 text-sm font-medium text-amber-700 transition-colors hover:bg-amber-100 dark:border-amber-600 dark:bg-amber-900/20 dark:text-amber-400 dark:hover:bg-amber-900/40"
-          >
-            Dev Bypass → Dashboard
-          </button>
-        )}
 
         <p className="mt-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
           <Link href="/" className="hover:underline">&larr; Back to home</Link>

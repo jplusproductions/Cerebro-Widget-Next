@@ -29,7 +29,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
   const view = searchParams.get("view") || "schedules"
   const initialTheme = searchParams.get("theme") || "light"
   const banner = searchParams.get("banner") !== "false"
-  const ThemeToggle = true
+  const showThemeToggle = true
 
   const [isDark, setIsDark] = useState(initialTheme === "dark")
 
@@ -49,7 +49,7 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
               Cerebro Sports Framework
             </h1>
             <div className="flex items-center gap-3">
-              {ThemeToggle && (
+              {showThemeToggle && (
                 <ThemeToggle isDark={isDark} />
               )}
               <select

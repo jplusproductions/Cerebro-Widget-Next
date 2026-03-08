@@ -3,7 +3,7 @@ import { router } from "@/server/trpc"
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-// import { RouterAuth } from "./router-auth/@index"
+import { RouterAuth } from "./router-auth/@index"
 import { RouterCerebroEvent } from "./router-cerebro-event/@index"
 import { RouterCerebroEvents } from "./router-cerebro-events/@index"
 import { RouterCerebroGame } from "./router-cerebro-game/@index"
@@ -35,7 +35,7 @@ import { RouterExposureTeams } from "./router-exposure-teams/@index"
 // =======================================================================================
 // =======================================================================================
 export const AppRouter = router({
-  // RouterAuth,
+  RouterAuth,
   RouterCerebroEvent,
   RouterCerebroEvents,
   RouterCerebroGame,

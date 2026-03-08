@@ -10,7 +10,6 @@ import { GamesListInputs, GamesListOutputs } from "./GamesListIO"
 // =======================================================================================
 // =======================================================================================
 export const GamesList = whiteListProcedure
-  .use(restrictToEvent)
   .meta({
     openapi: {
       method: "GET",
@@ -20,6 +19,7 @@ export const GamesList = whiteListProcedure
       tags: ["Games"],
     },
   })
+  .use(restrictToEvent)
   .input(GamesListInputs)
   .output(GamesListOutputs)
   .query(async ({ input, ctx: { script } }) => {

@@ -32,8 +32,6 @@ export const PlayersList = whiteListProcedure
       playerids: input.playerIds,
     })
 
-    console.log("response", response)
-
     return {
       players: response.results,
       pagination: response.pagination,

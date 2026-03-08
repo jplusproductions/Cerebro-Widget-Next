@@ -1,10 +1,11 @@
-import { publicProcedure } from "@/server/trpc"
+import { TRPCError } from "@trpc/server"
 
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
+import { publicProcedure } from "@/server/trpc"
 import { AuthLoginInputs, AuthLoginOutputs } from "./AuthLoginIO"
-import { BetterAuth } from "@/server/trpc-contexts/context-auth"
+import { createPortalToken, PORTAL_COOKIE_NAME } from "@/server/trpc-middlewares/jwt-construction"
 
 // Application Architecture || Define Exports
 // =======================================================================================
@@ -20,12 +21,20 @@ export const AuthLogin = publicProcedure
   })
   .input(AuthLoginInputs)
   .output(AuthLoginOutputs)
-  .mutation(async ({ input }) => {
-    const result = await BetterAuth.api.signInEmail({
-      body: {
-        email: input.email,
-        password: input.password,
-      },
-    })
-    return result
+  .mutation(async ({ input, ctx }) => {
+    const validEmail = process.env.CEREBRO_USERNAME
+    const validPassword = process.env.CEREBRO_PASSWORD
+
+    if (input.email !== validEmail || input.password !== validPassword) {
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid credentials" })
+    }
+
+    const token = createPortalToken(input.email)
+    const secure = process.env.NODE_ENV === "production"
+    ctx.resHeaders.append(
+      "Set-Cookie",
+      `${PORTAL_COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 * 60 * 24 * 7}${secure ? "; Secure" : ""}`,
+    )
+
+    return { token }
   })

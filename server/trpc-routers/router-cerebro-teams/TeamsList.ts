@@ -10,7 +10,6 @@ import { TeamsListInputs, TeamsListOutputs } from "./TeamsListIO"
 // =======================================================================================
 // =======================================================================================
 export const TeamsList = whiteListProcedure
-  .use(restrictToEvent)
   .meta({
     openapi: {
       method: "GET",
@@ -20,6 +19,7 @@ export const TeamsList = whiteListProcedure
       tags: ["Teams"],
     },
   })
+  .use(restrictToEvent)
   .input(TeamsListInputs)
   .output(TeamsListOutputs)
   .query(async ({ input, ctx: { script } }) => {

@@ -23,8 +23,8 @@ function formatDateHeading(dateStr: string): string {
 }
 
 function isGameCompleted(game: Game): boolean {
-  return game.AwayTeam.Score != null && game.HomeTeam.Score != null
-    && (game.AwayTeam.Score > 0 || game.HomeTeam.Score > 0)
+  return game.AwayTeam?.Score != null && game.HomeTeam?.Score != null
+    && (game.AwayTeam!.Score > 0 || game.HomeTeam!.Score > 0)
 }
 
 function getGameStatus(game: Game): { label: string; color: string } | null {
@@ -53,7 +53,7 @@ function getRoundLabel(game: Game): string {
 function groupByDate(games: Game[]): Map<string, Game[]> {
   const map = new Map<string, Game[]>()
   for (const game of games) {
-    const dateKey = game.Date.split("T")[0]
+    const dateKey = (game.Date ?? "").split("T")[0]
     const existing = map.get(dateKey)
     if (existing) existing.push(game)
     else map.set(dateKey, [game])
@@ -103,8 +103,8 @@ export default function WidgetSchedules({ eventId = 260104, pageSize = 10 }: Wid
   const teamOptions = useMemo(() => {
     const teams = new Set<string>()
     for (const g of games) {
-      if (g.AwayTeam.Name) teams.add(g.AwayTeam.Name)
-      if (g.HomeTeam.Name) teams.add(g.HomeTeam.Name)
+      if (g.AwayTeam?.Name) teams.add(g.AwayTeam.Name)
+      if (g.HomeTeam?.Name) teams.add(g.HomeTeam.Name)
     }
     return Array.from(teams).sort()
   }, [games])
@@ -124,7 +124,7 @@ export default function WidgetSchedules({ eventId = 260104, pageSize = 10 }: Wid
     }
     // Team filter
     if (selectedTeam !== "all") {
-      list = list.filter((g) => g.AwayTeam.Name === selectedTeam || g.HomeTeam.Name === selectedTeam)
+      list = list.filter((g) => g.AwayTeam?.Name === selectedTeam || g.HomeTeam?.Name === selectedTeam)
     }
     return list
   }, [games, activeTab, selectedRound, selectedTeam])
@@ -188,20 +188,20 @@ export default function WidgetSchedules({ eventId = 260104, pageSize = 10 }: Wid
                     {/* Away Team */}
                     <div className="flex flex-1 items-center justify-end gap-2">
                       <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200 text-right truncate">
-                        {game.AwayTeam.Name}
+                        {game.AwayTeam?.Name}
                       </span>
-                      <TeamLogo name={game.AwayTeam.Name} color={game.AwayTeam.Color} />
+                      <TeamLogo name={game.AwayTeam?.Name ?? ""} color={game.AwayTeam?.Color} />
                     </div>
 
                     {/* Score / Status */}
-                    <div className="flex flex-col items-center min-w-[72px]">
+                    <div className="flex flex-col items-center min-w-18">
                       {status && (
                         <span className={`text-[10px] font-semibold uppercase ${status.color}`}>
                           {status.label}
                         </span>
                       )}
                       <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                        {game.AwayTeam.Score ?? 0} - {game.HomeTeam.Score ?? 0}
+                        {game.AwayTeam?.Score ?? 0} - {game.HomeTeam?.Score ?? 0}
                       </span>
                       {venue && (
                         <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
@@ -212,9 +212,9 @@ export default function WidgetSchedules({ eventId = 260104, pageSize = 10 }: Wid
 
                     {/* Home Team */}
                     <div className="flex flex-1 items-center gap-2">
-                      <TeamLogo name={game.HomeTeam.Name} color={game.HomeTeam.Color} />
+                      <TeamLogo name={game.HomeTeam?.Name ?? ""} color={game.HomeTeam?.Color} />
                       <span className="text-sm font-medium text-zinc-800 dark:text-zinc-200 truncate">
-                        {game.HomeTeam.Name}
+                        {game.HomeTeam?.Name}
                       </span>
                     </div>
 

@@ -9,14 +9,19 @@ import { createTRPCContext } from "@/server/trpc-contexts/context-auth"
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-const tRPCRouteHandler = (req: Request) => {
+const tRPCRouteHandler = async (req: Request) => {
   const path = new URL(req.url).pathname.replace("/api/trpc/", "")
-  return fetchRequestHandler({
+  const ctx = await createTRPCContext({ headers: req.headers, path })
+  const res = await fetchRequestHandler({
     req,
     router: AppRouter,
     endpoint: "/api/trpc",
-    createContext: () => createTRPCContext({ headers: req.headers, path }),
+    createContext: () => ctx,
   })
+  ctx.resHeaders.forEach((value, key) => {
+    res.headers.append(key, value)
+  })
+  return res
 }
 
 // Application Architecture || Define Exports

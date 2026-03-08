@@ -38,7 +38,7 @@ export class ExposureEventsApi {
         this.signRequest(config)
         const params = config.params ? `?${ new URLSearchParams(config.params).toString()}` : ""
         const headers = [`-H "Authentication: ${config.headers.get("Authentication")}"`, `-H "Timestamp: ${config.headers.get("Timestamp")}"`].join(" ")
-        console.log(`[ExposureEventsApi] curl -X ${(config.method ?? "GET").toUpperCase()} "${config.baseURL}${config.url}${params}" ${headers}`)
+        // console.log(`[ExposureEventsApi] curl -X ${(config.method ?? "GET").toUpperCase()} "${config.baseURL}${config.url}${params}" ${headers}`)
         return config
       },
     )

@@ -40,7 +40,7 @@ export default function WidgetTeams({ pageSize = 10 }: WidgetTeamsProps) {
             <div
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white bg-zinc-500"
             >
-              {team.Name.charAt(0).toUpperCase()}
+              {team.Name?.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200 truncate">{team.Name}</p>

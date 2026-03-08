@@ -29,12 +29,12 @@ export const EventRead = whiteListProcedure
     return {
       id: e.id,
       name: e.name,
-      gender: e.gender,
-      level: e.level,
-      location: e.location,
-      region: e.region,
-      startDate: e.start_date,
-      endDate: e.end_date,
+      gender: e.gender ?? null,
+      level: e.level ?? null,
+      location: e.location ?? null,
+      region: e.region ?? null,
+      startDate: e.start_date ?? null,
+      endDate: e.end_date ?? null,
       createdDate: e.created_date,
       modifiedDate: e.modified_date,
     }

@@ -1,11 +1,13 @@
 "use client"
 import Link from "next/link"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useMutation } from "@tanstack/react-query"
 
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
+import { useTRPC } from "@AppComps/@TRPCProvider"
 import { ThemeToggle } from "@AppComps/@Tailwind"
 
 // Application Architecture || Define Variables
@@ -46,7 +48,13 @@ function buildBreadcrumbs(pathname: string) {
 // =======================================================================================
 // =======================================================================================
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
+  const trpc = useTRPC()
   const pathname = usePathname()
+  const router = useRouter()
+
+  const logout = useMutation(trpc.RouterAuth.AuthLogout.mutationOptions({
+    onSuccess: () => router.push("/login"),
+  }))
 
   return (
     <div className="flex h-screen overflow-hidden bg-zinc-50 dark:bg-zinc-950">
@@ -99,15 +107,15 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
           </nav>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <Link
-              href="/login"
+            <button
+              onClick={() => logout.mutate()}
               aria-label="Log out"
               className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:border-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-            </Link>
+            </button>
           </div>
         </header>
 
