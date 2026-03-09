@@ -4,7 +4,7 @@ import type { Team } from "@/server/foreign-sdks/sdk-exposure-events/exposure-ev
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { paginationInputs, paginationOutputs } from "@/prisma/validators/filters"
+import { paginationInputs, paginationOutputs } from "@AppUtils/cross/validators/filters"
 
 // Application Architecture || Define Inputs
 // =======================================================================================
