@@ -3,7 +3,7 @@ import { z } from "zod"
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { paginationInputs, paginationOutputs } from "@/prisma/validators/filters"
+import { paginationInputs, paginationOutputs } from "@AppUtils/cross/validators/filters"
 import { TeamReadOutputs } from "@/server/trpc-routers/router-cerebro-team/TeamReadIO"
 
 // Application Architecture || Define Inputs

@@ -4,7 +4,7 @@ import type { Venue } from "@/server/foreign-sdks/sdk-exposure-events/exposure-e
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { paginationOutputs } from "@/prisma/validators/filters"
+import { paginationOutputs } from "@AppUtils/cross/validators/filters"
 
 // Application Architecture || Define Inputs
 // =======================================================================================
