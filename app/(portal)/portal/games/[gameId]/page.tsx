@@ -43,15 +43,6 @@ export default function PortalGameDetailPage() {
 
   return (
     <div className="space-y-6">
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400">
-        <Link href={backUrl} className="transition-colors hover:text-zinc-900 dark:hover:text-zinc-100">
-          Games
-        </Link>
-        <span>/</span>
-        <span className="text-zinc-900 dark:text-zinc-100">View Game</span>
-      </nav>
-
       {/* Header */}
       <div className="space-y-4">
         {isLoading && (
@@ -138,12 +129,6 @@ function TeamPlayersTab({ teamId, teamName }: { teamId: string; teamName: string
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-sm font-bold text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300">
-          {teamName.charAt(0)}
-        </div>
-        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{teamName}</span>
-      </div>
       <Table
         name="Players"
         columns={PlayersListColumns}
