@@ -3,7 +3,7 @@ import { z } from "zod"
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { paginationInputs, paginationOutputs } from "@AppUtils/cross/validators/filters"
+import { paginationInputs, paginationOutputs } from "@AppUtils/cross/filters"
 import { PlayerReadOutputs } from "@/server/trpc-routers/router-cerebro-player/PlayerReadIO"
 
 // Application Architecture || Define Inputs

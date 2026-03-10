@@ -10,6 +10,7 @@ import { RouterCerebroGame } from "./router-cerebro-game/@index"
 import { RouterCerebroGames } from "./router-cerebro-games/@index"
 import { RouterCerebroPlayer } from "./router-cerebro-player/@index"
 import { RouterCerebroPlayers } from "./router-cerebro-players/@index"
+import { RouterCerebroStatistics } from "./router-cerebro-statistics/@index"
 import { RouterCerebroTeam } from "./router-cerebro-team/@index"
 import { RouterCerebroTeams } from "./router-cerebro-teams/@index"
 // import { RouterExposureDivision } from "./router-exposure-division/@index"
@@ -42,6 +43,7 @@ export const AppRouter = router({
   RouterCerebroGames,
   RouterCerebroPlayer,
   RouterCerebroPlayers,
+  RouterCerebroStatistics,
   RouterCerebroTeam,
   RouterCerebroTeams,
   // RouterExposureDivision,

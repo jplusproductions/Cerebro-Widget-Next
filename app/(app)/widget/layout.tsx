@@ -28,7 +28,10 @@ function AppLayoutInner({ children }: { children: React.ReactNode }) {
 
   const view = searchParams.get("view") || "schedules"
   const initialTheme = searchParams.get("theme") || "light"
-  const banner = searchParams.get("banner") !== "false"
+  const isRootWidget = pathname === "/widget"
+  const banner = isRootWidget
+    ? searchParams.get("banner") !== "false"
+    : searchParams.get("banner") === "true"
   const showThemeToggle = true
 
   const [isDark, setIsDark] = useState(initialTheme === "dark")

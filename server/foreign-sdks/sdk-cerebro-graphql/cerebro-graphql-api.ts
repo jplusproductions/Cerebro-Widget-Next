@@ -182,6 +182,162 @@ export class CerebroGraphqlApi {
     return data
   }
 
+  // Application Architecture || Game Players
+  // =====================================================================================
+  async getPlayersByGameId(gameId: string, teamId?: string) {
+    const queryVars = teamId
+      ? "$gameId: uuid!, $teamId: uuid!"
+      : "$gameId: uuid!"
+
+    const whereClause = teamId
+      ? "{game_id: {_eq: $gameId}, team_id: {_eq: $teamId}}"
+      : "{game_id: {_eq: $gameId}}"
+
+    const variables: Record<string, unknown> = { gameId }
+    if (teamId) variables.teamId = teamId
+
+    const data = await this.query<{
+      player_game: Array<{
+        id: string
+        game_id: string
+        team_id: string
+        player_id: string
+        position: string | null
+        jersey_number: string | number | null
+        player: {
+          id: string
+          name: string
+          date_of_birth: string | null
+          position: string | null
+          height_inches: number | null
+          weight_lb: number | null
+          nationality: string | null
+          hometown: string | null
+        } | null
+      }>
+      player_game_aggregate: { aggregate: { count: number } }
+    }>(
+      `query GetPlayersByGameId(${queryVars}) {
+        player_game(where: ${whereClause}) {
+          id
+          game_id
+          team_id
+          player_id
+          position
+          jersey_number
+          player {
+            id
+            name
+            date_of_birth
+            position
+            height_inches
+            weight_lb
+            nationality
+            hometown
+          }
+        }
+        player_game_aggregate(where: ${whereClause}) {
+          aggregate {
+            count
+          }
+        }
+      }`,
+      variables,
+    )
+
+    return {
+      player_game: data.player_game ?? [],
+      total: data.player_game_aggregate.aggregate.count,
+    }
+  }
+
+  // Application Architecture || Game Statistics
+  // =====================================================================================
+  async getStatisticsByGameId(gameId: string, teamId?: string) {
+    const queryVars = teamId
+      ? "$gameId: uuid!, $teamId: uuid!"
+      : "$gameId: uuid!"
+
+    const whereClause = teamId
+      ? "{game_id: {_eq: $gameId}, team_id: {_eq: $teamId}}"
+      : "{game_id: {_eq: $gameId}}"
+
+    const variables: Record<string, unknown> = { gameId }
+    if (teamId) variables.teamId = teamId
+
+    const data = await this.query<{
+      player_game: Array<{
+        id: string
+        game_id: string
+        team_id: string
+        player_id: string
+        opp_team_id: string | null
+        position: string | null
+        jersey_number: string | number | null
+        minutes: number | null
+        pts: number | null
+        reb: number | null
+        ast: number | null
+        stl: number | null
+        blk: number | null
+        pf: number | null
+        tov: number | null
+        fga: number | null
+        fgm: number | null
+        fta: number | null
+        ftm: number | null
+        three_pa: number | null
+        three_pm: number | null
+        drb: number | null
+        orb: number | null
+        player: { name: string } | null
+      }>
+      player_game_aggregate: { aggregate: { count: number } }
+    }>(
+      `query GetStatsByGameId(${queryVars}) {
+        player_game(where: ${whereClause}) {
+          id
+          game_id
+          team_id
+          player_id
+          opp_team_id
+          position
+          jersey_number
+          minutes
+          pts
+          reb
+          ast
+          stl
+          blk
+          pf
+          tov
+          fga
+          fgm
+          fta
+          ftm
+          three_pa
+          three_pm
+          drb
+          orb
+          player {
+            name
+          }
+        }
+        player_game_aggregate(where: ${whereClause}) {
+          aggregate {
+            count
+          }
+        }
+      }`,
+      variables,
+    )
+
+    return {
+      player_game: data.player_game ?? [],
+      total: data.player_game_aggregate.aggregate.count,
+    }
+  }
+
   // Application Architecture || Events
   // =====================================================================================
   async getEvent(args: Query_RootEvent_By_PkArgs) {
