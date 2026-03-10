@@ -36,12 +36,12 @@ export const StatisticRead = whiteListProcedure
     await script.insight(`gameId: ${input.gameId}, teamId: ${input.teamId ?? "none"}`)
 
     const whereClause = input.teamId
-      ? `{game_id: {_eq: $gameId}, team_id: {_eq: $teamId}}`
-      : `{game_id: {_eq: $gameId}}`
+      ? "{game_id: {_eq: $gameId}, team_id: {_eq: $teamId}}"
+      : "{game_id: {_eq: $gameId}}"
 
     const queryVars = input.teamId
-      ? `$gameId: uuid!, $teamId: uuid!`
-      : `$gameId: uuid!`
+      ? "$gameId: uuid!, $teamId: uuid!"
+      : "$gameId: uuid!"
 
     const variables: Record<string, unknown> = { gameId: input.gameId }
     if (input.teamId) variables.teamId = input.teamId
