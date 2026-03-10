@@ -3,13 +3,11 @@ import { router } from "@/server/trpc"
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { GameRead } from "./GameRead"
-import { GameXStatisticsList } from "./GameXStatisticsList"
+import { StatisticRead } from "./StatisticRead"
 
 // Application Architecture || Define Exports
 // =======================================================================================
 // =======================================================================================
-export const RouterCerebroGame = router({
-  GameRead,
-  GameXStatisticsList,
+export const RouterCerebroStatistics = router({
+  StatisticRead,
 })

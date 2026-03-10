@@ -45,7 +45,7 @@ export default function Table<T>({ columns, data, name, isLoading, rowHeight = "
             ))}
           </thead>
           <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-            {isLoading && Array.from({ length: pagination.pageSize }).map((_, i) => (
+            {isLoading && Array.from({ length: Math.min(pagination.pageSize, 10) }).map((_, i) => (
               <tr key={`skeleton-${i}`} className="bg-white dark:bg-zinc-900/50">
                 {columns.map((col, j) => (
                   <td key={j} className="px-4 py-3" style={{ textAlign: getAlign(col.meta) }}>
