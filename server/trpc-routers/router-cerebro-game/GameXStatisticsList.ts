@@ -25,7 +25,6 @@ export const GameXStatisticsList = whiteListProcedure
 
     const { player_game, total } = await CerebroClient.getStatisticsByGameId(input.gameId, input.teamId)
 
-    console.log("[GameXStatisticsList] raw player_game:", JSON.stringify(player_game, null, 2))
 
     return {
       statistics: player_game.map((pg) => ({

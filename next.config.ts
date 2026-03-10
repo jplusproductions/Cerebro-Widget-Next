@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.dc.prod.cloud.atriumsports.com" },
+      { protocol: "https", hostname: "placehold.co" },
     ],
   },
   headers: async () => [

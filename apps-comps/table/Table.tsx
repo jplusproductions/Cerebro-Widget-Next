@@ -27,7 +27,7 @@ export default function Table<T>({ columns, data, name, isLoading, rowHeight = "
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-4">
-      <div className="min-h-75 flex-1 overflow-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/50">
+      <div className={`min-h-75 flex-1 rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/50 ${isLoading ? "overflow-y-auto overflow-x-hidden" : "overflow-auto"}`}>
         <table className="w-full text-left text-sm">
           <thead className="sticky top-0 z-10 border-b border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
             {table.getHeaderGroups().map((headerGroup) => (

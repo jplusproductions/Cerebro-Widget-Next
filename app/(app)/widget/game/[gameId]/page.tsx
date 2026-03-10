@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
+import { getTeamsInitials } from "@AppUtils/cross/commons"
 import { useTRPC } from "@AppComps/@TRPCProvider"
 import { StatisticsListColumns } from "@AppComps/table-columns/StatisticsListColumn"
 import Table from "@AppComps/table/Table"
@@ -35,10 +36,14 @@ export default function WidgetGameDetailPage() {
         <div className="flex min-h-[112px] items-center p-6 bg-white rounded-lg border border-gray-200 dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex w-full items-center justify-between">
             {game ? (
-              <span className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{team1Name}</span>
+              <div className="flex items-center gap-3">
+                <img src={`https://placehold.co/30x30/e4e4e7/3f3f46?text=${getTeamsInitials(team1Name)}`} alt={team1Name} className="h-[30px] w-[30px] rounded" />
+                <span className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{team1Name}</span>
+              </div>
             ) : (
-              <div className="flex">
-                <div className="h-7 w-8 animate-pulse rounded bg-zinc-200 dark:bg-zinc-700" />
+              <div className="flex items-center gap-3">
+                <div className="h-[30px] w-[30px] animate-pulse rounded bg-zinc-200 dark:bg-zinc-700" />
+                <div className="h-7 w-20 animate-pulse rounded bg-zinc-200 dark:bg-zinc-700" />
               </div>
             )}
             <div className="flex flex-col items-center">
@@ -66,10 +71,14 @@ export default function WidgetGameDetailPage() {
               )}
             </div>
             {game ? (
-              <span className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{team2Name}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-lg font-bold text-zinc-900 dark:text-zinc-100">{team2Name}</span>
+                <img src={`https://placehold.co/30x30/e4e4e7/3f3f46?text=${getTeamsInitials(team2Name)}`} alt={team2Name} className="h-[30px] w-[30px] rounded" />
+              </div>
             ) : (
-              <div className="flex">
-                <div className="h-7 w-8 animate-pulse rounded bg-zinc-200 dark:bg-zinc-700" />
+              <div className="flex items-center gap-3">
+                <div className="h-7 w-20 animate-pulse rounded bg-zinc-200 dark:bg-zinc-700" />
+                <div className="h-[30px] w-[30px] animate-pulse rounded bg-zinc-200 dark:bg-zinc-700" />
               </div>
             )}
           </div>

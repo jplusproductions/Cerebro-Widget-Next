@@ -4,7 +4,7 @@ import type { Event } from "@/server/foreign-sdks/sdk-exposure-events/exposure-e
 // Application Architecture || Define Imports
 // =======================================================================================
 // =======================================================================================
-import { paginationInputs, paginationOutputs } from "@AppUtils/cross/validators/filters"
+import { paginationInputs, paginationOutputs } from "@AppUtils/cross/filters"
 
 // Application Architecture || Define Inputs
 // =======================================================================================
